@@ -374,13 +374,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1180773776}
+        m_MethodName: ButtonBuyTower
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1067,13 +1067,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1180773776}
+        m_MethodName: ButtonBuyTower
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2181,13 +2181,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1180773776}
+        m_MethodName: ButtonBuyTower
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3888,13 +3888,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1180773776}
+        m_MethodName: ButtonBuyTower
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4828,6 +4828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnBuyTower: {fileID: 196712314}
+  towerPlacementIndex: 0
 --- !u!4 &1180773777
 Transform:
   m_ObjectHideFlags: 0
@@ -7729,6 +7730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1813817837}
   - component: {fileID: 1813817838}
+  - component: {fileID: 1813817839}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -7762,8 +7764,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21e1fc1642c4f2548a059510bd9be4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayParent: {fileID: 0}
   map: {fileID: 1672395615}
+--- !u!114 &1813817839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813817836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eade4df96b3dff44890812a4c266672e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerParent: {fileID: 1201865942}
+  towerPlacementParent: {fileID: 398481201}
+  barackTower: {fileID: 4722705662661756697, guid: c70c5866e9889b84b8b93faac1f86be3,
+    type: 3}
+  archerTower: {fileID: 6277691435340428955, guid: 63ef48e9e3326ce47bb568ef908e1d3d,
+    type: 3}
+  canonTower: {fileID: 4543524985701268865, guid: b1c491d3cc1441e439f200100f93a4e6,
+    type: 3}
+  magicTower: {fileID: 2404044788334449908, guid: 1b2ac70fa4d4fa942b7023d62bf2d50c,
+    type: 3}
+  effectSpawnTower: {fileID: 1753044329413552666, guid: f42b97879c7ca694284588d87b06945f,
+    type: 3}
 --- !u!1 &1818370627
 GameObject:
   m_ObjectHideFlags: 0

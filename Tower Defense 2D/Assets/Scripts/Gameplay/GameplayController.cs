@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 
 public class GameplayController : MonoBehaviour
 {
-    public Transform gameplayParent;
+    public static GameplayController instance;
+
 
     //public LayerMask towerPlacementLayer;
     int fingerID = -1;
@@ -16,9 +17,15 @@ public class GameplayController : MonoBehaviour
     private float mapMinX, mapMinY, mapMaxX, mapMaxY;
     private float zoomOutMin, zoomOutMax;
     private bool isMultiTouch = false;
+    private bool isDragging = false;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
 #if !UNITY_EDITOR
      fingerID = 0; 
 #endif
@@ -37,36 +44,9 @@ public class GameplayController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                isDragging = false;
                 isMultiTouch = false;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-
-                if (hit.collider != null)
-                {
-                    if (hit.collider.tag.Equals("TowerPlacement"))
-                    {
-                        UIController.instance.btnBuyTower.transform.DOKill();
-                        UIController.instance.btnBuyTower.SetActive(false);
-                        UIController.instance.btnBuyTower.transform.position = hit.collider.transform.position;
-                        UIController.instance.btnBuyTower.transform.localScale = new Vector3(0, 0, 0);
-                        UIController.instance.btnBuyTower.SetActive(true);
-                        UIController.instance.btnBuyTower.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
-                    }
-                }
-                else
-                {
-                    if (UIController.instance.btnBuyTower.transform.localScale == new Vector3(1, 1, 1))
-                    {
-                        UIController.instance.btnBuyTower.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
-                        {
-                            UIController.instance.btnBuyTower.SetActive(false);
-                        });
-                    }
-                    else
-                    {
-                        touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    }
-                }
+                touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
 
             if (Input.touchCount == 2)
@@ -85,30 +65,53 @@ public class GameplayController : MonoBehaviour
 
                     float difference = currentMagnitude - prevMagnitude;
 
-                    zoom(difference * 0.01f);
+                    Zoom(difference * 0.01f);
                 }
             }
             else if (Input.GetMouseButton(0) && !isMultiTouch)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-
-                if (hit.collider == null && !UIController.instance.btnBuyTower.activeSelf)
+                if (!UIController.instance.btnBuyTower.activeSelf)
                 {
                     Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                    if (direction.x > 0.01f || direction.x < -0.01f || direction.y > 0.01f || direction.y < -0.01f)
+                    {
+                        isDragging = true;
+                    }
 
                     Camera.main.transform.position = ClampCamera(Camera.main.transform.position + direction);
                 }
             }
-        }
 
-        if (!UIController.instance.btnBuyTower.activeSelf)
-        {
-            zoom(Input.GetAxis("Mouse ScrollWheel"));
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (!isDragging && !isMultiTouch)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+                    if (hit.collider != null)
+                    {
+                        if (hit.collider.tag.Equals("TowerPlacement"))
+                        {
+                            UIController.instance.OpenBtnBuyTower(hit.collider.transform, hit.collider.transform.parent.GetSiblingIndex());
+                        }
+                    }
+                    else
+                    {
+                        UIController.instance.CloseBtnBuyTower();
+                    }
+                }
+            }
+
+            if (!UIController.instance.btnBuyTower.activeSelf)
+            {
+                Zoom(Input.GetAxis("Mouse ScrollWheel"));
+            }
         }
     }
 
-    void zoom(float increment)
+    void Zoom(float increment)
     {
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, zoomOutMin, zoomOutMax);
         Camera.main.transform.position = ClampCamera(Camera.main.transform.position);
@@ -141,4 +144,5 @@ public class GameplayController : MonoBehaviour
 
         return new Vector3(newX, newy, targetPosition.z);
     }
+    
 }
