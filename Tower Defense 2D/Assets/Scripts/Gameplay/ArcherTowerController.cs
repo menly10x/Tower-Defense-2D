@@ -9,6 +9,8 @@ public class ArcherTowerController : MonoBehaviour
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
+    List<GameObject> monsters;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,4 +51,20 @@ public class ArcherTowerController : MonoBehaviour
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
         skeletonAnimation.state.SetAnimation(0, "attack_end", true);
     }
+
+    //private void OnTriggerEnter2D(Collider2D target)
+    //{
+    //    if (target.gameObject.tag.Equals("Monster"))
+    //    {
+    //        monsters.Add(target.gameObject);
+    //    }
+    //}
+
+    //private void OnTriggerExit2D(Collider2D target)
+    //{
+    //    if (target.gameObject.tag.Equals("Monster"))
+    //    {
+    //        monsters.Remove(target.gameObject);
+    //    }
+    //}
 }
