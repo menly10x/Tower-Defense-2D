@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6658399469221330763}
   - component: {fileID: 2345558454504853912}
   - component: {fileID: 6320040890588420718}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer02)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 7625122337663554694}
   - component: {fileID: 872223051677925331}
   - component: {fileID: 7971007967272533490}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer04)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 5769872429754202248}
   - component: {fileID: 3758903603810962686}
   - component: {fileID: 5179879920035452123}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer06)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402574558466385220}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 432165688977560585}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3966485969770698972}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 5273594108926170217}
   - component: {fileID: 2025643772005399053}
   - component: {fileID: 776937668013519325}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer02_insignia)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +547,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2239301697665289531}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +579,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 425837995694089668}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 8138366123587665601}
   - component: {fileID: 4309153798334933090}
   - component: {fileID: 183073138919664490}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer05)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5427666408691246684}
   - component: {fileID: 5019042185137838994}
-  m_Layer: 0
+  - component: {fileID: 9143889357658207823}
+  m_Layer: 10
   m_Name: Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,6 +742,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6614220190739094875}
+  - {fileID: 4979109464347450383}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -757,6 +759,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spineLevelParent: {fileID: 6614220190739094875}
+--- !u!50 &9143889357658207823
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6277691435340428955}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6366700578005510991
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,7 +789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6614220190739094875}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -805,7 +828,7 @@ GameObject:
   - component: {fileID: 7300756937411628612}
   - component: {fileID: 2725513381121039047}
   - component: {fileID: 4506643562093541450}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer01)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -913,7 +936,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7090120991062156260}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -947,7 +970,7 @@ GameObject:
   - component: {fileID: 6759704855331431043}
   - component: {fileID: 4591533463671511549}
   - component: {fileID: 1388047635556842089}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer01_insignia)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1081,7 @@ GameObject:
   - component: {fileID: 2840322977209086754}
   - component: {fileID: 2595749429823315360}
   - component: {fileID: 8341924393859703088}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (archer03)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1157,3 +1180,50 @@ MonoBehaviour:
   _animationName: 
   loop: 0
   timeScale: 1
+--- !u!1 &8898436043810383684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4979109464347450383}
+  - component: {fileID: 9159846131841578150}
+  m_Layer: 10
+  m_Name: AttackRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4979109464347450383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8898436043810383684}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5427666408691246684}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &9159846131841578150
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8898436043810383684}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.5

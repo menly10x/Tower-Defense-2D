@@ -8,10 +8,7 @@ public class GameplayController : MonoBehaviour
 {
     public static GameplayController instance;
 
-
-    //public LayerMask towerPlacementLayer;
     int fingerID = -1;
-
     Vector3 touchStart;
     public SpriteRenderer map;
     private float mapMinX, mapMinY, mapMaxX, mapMaxY;
