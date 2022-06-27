@@ -10,10 +10,16 @@ public class MonsterSpawnController : MonoBehaviour
     public Transform pathWayParent;
 
     public Transform monsterParent;
-    public GameObject skeletonLeader;
-    public GameObject skeleton;
 
-    float countDown = 5f;
+    float countDown = 3f;
+
+    int wave;
+
+    public GameObject[] monster;
+
+    public GameObject[] boss;
+    public GameObject[] leader;
+    public GameObject[] normal;
 
     private void Awake()
     {
@@ -26,46 +32,35 @@ public class MonsterSpawnController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         StartCoroutine(delaySpawnMonster());
+        wave = 1;
+        SpawnMonster(monster[Random.Range(0, monster.Length)]);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(countDown > 0)
+        if (countDown > 0)
         {
             countDown -= Time.deltaTime;
         }
         else
         {
-            countDown = 5f;
-            IEnumerator c = delaySpawnMonster();
-            StartCoroutine(c); 
+            countDown = 3f;
+            SpawnMonster(monster[Random.Range(0, monster.Length)]);
         }
-    }
-
-    IEnumerator delaySpawnMonster()
-    {
-        SpawnMonster(skeletonLeader);
-
-        yield return new WaitForSeconds(1f);
-
-        SpawnMonster(skeleton);
     }
 
     void SpawnMonster(GameObject monster)
     {
-        Vector3[] paths = new Vector3[pathWayParent.GetChild(0).childCount];
-        for (int i = 0; i < pathWayParent.GetChild(0).childCount; i++)
+        Transform path = pathWayParent.GetChild(Random.Range(0, pathWayParent.childCount));
+        Vector3[] wayPoints = new Vector3[path.childCount];
+        for (int i = 0; i < path.childCount; i++)
         {
-            paths[i] = pathWayParent.GetChild(0).GetChild(i).position;
+            wayPoints[i] = path.GetChild(i).position;
         }
-
         GameObject newMonster = Instantiate(monster, monsterParent);
-        newMonster.transform.position = pathWayParent.GetChild(0).GetChild(0).position;
-        newMonster.transform.DOPath(paths, 30f, PathType.Linear, PathMode.TopDown2D, 0).OnComplete(() =>
-        {
-            Destroy(newMonster);
-        });
+        newMonster.transform.position = path.GetChild(0).position;
+        newMonster.GetComponent<MonsterController>().wayPoints = wayPoints;
     }
+
 }
