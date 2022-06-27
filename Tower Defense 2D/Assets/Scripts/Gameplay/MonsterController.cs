@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Spine.Unity;
+using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
     public float moveSpeed;
     SkeletonAnimation skeletonAnimation;
     public Vector3[] wayPoints;
+
+    public Slider slider;
+    public Vector3 offset;
 
     private int health;
     public int Health
@@ -20,6 +24,12 @@ public class MonsterController : MonoBehaviour
         set
         {
             health = value;
+            slider.maxValue = 100;
+            slider.value = health;
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -33,14 +43,14 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
     }
 
     public void Move()
     {
         SetWalk();
         float timeToMove = CalculateDistance(wayPoints) / moveSpeed;
-        transform.DOPath(wayPoints, timeToMove, PathType.Linear, PathMode.TopDown2D, 0, Color.red).OnWaypointChange(MyCallBack).OnComplete(() =>
+        transform.DOPath(wayPoints, timeToMove, PathType.Linear, PathMode.TopDown2D, 0, Color.red).SetEase(Ease.Linear).OnWaypointChange(MyCallBack).OnComplete(() =>
         {
             Destroy(gameObject);
         });

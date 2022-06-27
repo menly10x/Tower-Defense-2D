@@ -1,17 +1,17 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity;
-using DG.Tweening;
 
-public class ArcherTowerController : MonoBehaviour
+public class MagicTowerController : MonoBehaviour
 {
     int level;
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
+    public GameObject magicBullet;
     List<GameObject> monsters = new List<GameObject>();
-    public GameObject arrow;
     float countDown = 0f;
     int damage = 5;
 
@@ -47,18 +47,12 @@ public class ArcherTowerController : MonoBehaviour
         else
         {
             countDown = 1.2f;
-            arrow.transform.localPosition = new Vector3(0, 0, 0);
+            magicBullet.transform.localPosition = new Vector3(0, 0, 0);
 
-            Vector3 direct = monster.transform.position - arrow.transform.position;
-
-            float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
-
-            arrow.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
-            arrow.SetActive(true);
-            arrow.transform.DOMove(monster.transform.position, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
+            magicBullet.SetActive(true);
+            magicBullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                arrow.SetActive(false);
+                magicBullet.SetActive(false);
                 monster.GetComponentInParent<MonsterController>().Health -= damage;
             });
         }
@@ -87,24 +81,11 @@ public class ArcherTowerController : MonoBehaviour
         skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
 
-    void SetAttackStart(int level)
+    void SetAttack(int level)
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack_start", true);
+        skeletonAnimation.state.SetAnimation(0, "attack", false);
     }
 
-    void SetAttackIdle(int level)
-    {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack_idle", true);
-    }
-
-    void SetAttackEnd(int level)
-    {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack_end", true);
-    }
 }
