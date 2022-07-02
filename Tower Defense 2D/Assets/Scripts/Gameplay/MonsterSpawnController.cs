@@ -11,7 +11,7 @@ public class MonsterSpawnController : MonoBehaviour
 
     public Transform monsterParent;
 
-    float countDown = 3f;
+    float countDown = 5f;
 
     int wave;
 
@@ -33,7 +33,6 @@ public class MonsterSpawnController : MonoBehaviour
     void Start()
     {
         wave = 1;
-        SpawnMonster(monster[Random.Range(0, monster.Length)]);
     }
 
     // Update is called once per frame

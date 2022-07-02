@@ -11,6 +11,7 @@ public class GameplayController : MonoBehaviour
     int fingerID = -1;
     Vector3 touchStart;
     public SpriteRenderer map;
+    public LayerMask towerPlacementLayer;
     private float mapMinX, mapMinY, mapMaxX, mapMaxY;
     private float zoomOutMin, zoomOutMax;
     private bool isMultiTouch = false;
@@ -71,7 +72,7 @@ public class GameplayController : MonoBehaviour
                 {
                     Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                    if (direction.x > 0.01f || direction.x < -0.01f || direction.y > 0.01f || direction.y < -0.01f)
+                    if (direction.x > 0.02f || direction.x < -0.02f || direction.y > 0.02f || direction.y < -0.02f)
                     {
                         isDragging = true;
                     }
@@ -85,7 +86,7 @@ public class GameplayController : MonoBehaviour
                 if (!isDragging && !isMultiTouch)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerPlacementLayer);
 
                     if (hit.collider != null)
                     {
