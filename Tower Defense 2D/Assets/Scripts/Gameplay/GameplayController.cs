@@ -12,6 +12,7 @@ public class GameplayController : MonoBehaviour
     Vector3 touchStart;
     public SpriteRenderer map;
     public LayerMask towerPlacementLayer;
+    public LayerMask towerLayer;
     private float mapMinX, mapMinY, mapMaxX, mapMaxY;
     private float zoomOutMin, zoomOutMax;
     private bool isMultiTouch = false;
@@ -49,7 +50,7 @@ public class GameplayController : MonoBehaviour
 
             if (Input.touchCount == 2)
             {
-                if (!UIController.instance.btnBuyTower.activeSelf)
+                if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeTower.activeSelf)
                 {
                     isMultiTouch = true;
                     Touch touchZero = Input.GetTouch(0);
@@ -68,7 +69,7 @@ public class GameplayController : MonoBehaviour
             }
             else if (Input.GetMouseButton(0) && !isMultiTouch)
             {
-                if (!UIController.instance.btnBuyTower.activeSelf)
+                if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeTower.activeSelf)
                 {
                     Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -99,10 +100,23 @@ public class GameplayController : MonoBehaviour
                     {
                         UIController.instance.CloseBtnBuyTower();
                     }
+
+                    hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerLayer);
+                    if (hit.collider != null)
+                    {
+                        if (hit.collider.tag.Equals("Tower"))
+                        {
+                            UIController.instance.OpenBtnUpgradeTower(hit.collider.transform, hit.collider.gameObject.transform.parent.gameObject);
+                        }
+                    }
+                    else
+                    {
+                        UIController.instance.CloseBtnUpgradeTower();
+                    }
                 }
             }
 
-            if (!UIController.instance.btnBuyTower.activeSelf)
+            if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeTower.activeSelf)
             {
                 Zoom(Input.GetAxis("Mouse ScrollWheel"));
             }

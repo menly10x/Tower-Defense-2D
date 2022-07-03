@@ -36,5 +36,28 @@ public class TowerManager : MonoBehaviour
         GameObject newTower = Instantiate(tower, towerParent);
         towerPlacement.gameObject.SetActive(false);
         newTower.transform.position = towerPlacement.position;
+        newTower.GetComponent<TowerController>().towerPlacementIndex = towerPlacementIndex;
+    }
+
+    public IEnumerator UpgradeTower(GameObject tower)
+    {
+        GameObject effectSpawn = Instantiate(effectSpawnTower);
+        effectSpawn.transform.position = tower.transform.position;
+
+        yield return new WaitForSeconds(0.4f);
+
+        Transform towerLevel = tower.transform.GetChild(0);
+        for (int i = 0; i < towerLevel.childCount - 1; i++)
+        {
+            if (towerLevel.GetChild(i).gameObject.activeSelf)
+            {
+                if (towerLevel.GetChild(i + 1) != null)
+                {
+                    towerLevel.GetChild(i).gameObject.SetActive(false);
+                    towerLevel.GetChild(i + 1).gameObject.SetActive(true);
+                    break;
+                }
+            }
+        }
     }
 }
