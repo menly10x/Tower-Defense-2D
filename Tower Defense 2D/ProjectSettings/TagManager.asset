@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TowerPlacement
   - Monster
+  - Tower
   layers:
   - Default
   - TransparentFX

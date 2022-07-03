@@ -8,8 +8,10 @@ public class UIController : MonoBehaviour
     public static UIController instance;
 
     public GameObject btnBuyTower;
+    public GameObject btnUpgradeTower;
     [SerializeField]
     int towerPlacementIndex;
+    GameObject currentTower;
 
     private void Awake()
     {
@@ -66,5 +68,28 @@ public class UIController : MonoBehaviour
                 StartCoroutine(TowerManager.instance.SpawnTower(TowerManager.instance.magicTower, towerPlacementIndex));
                 break;
         }
+    }
+
+    public void OpenBtnUpgradeTower(Transform targetPosition, GameObject tower)
+    {
+        btnUpgradeTower.transform.DOKill();
+        btnUpgradeTower.SetActive(false);
+        btnUpgradeTower.transform.position = targetPosition.position;
+        btnUpgradeTower.transform.localScale = new Vector3(0, 0, 0);
+        btnUpgradeTower.SetActive(true);
+        btnUpgradeTower.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
+        currentTower = tower;
+    }
+
+    public void CloseBtnUpgradeTower()
+    {
+        btnUpgradeTower.transform.DOKill();
+        btnUpgradeTower.SetActive(false);
+    }
+
+    public void ButtonUpgradeTower()
+    {
+        CloseBtnUpgradeTower();
+        StartCoroutine(TowerManager.instance.UpgradeTower(currentTower));
     }
 }

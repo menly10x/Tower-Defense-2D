@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 63677990816514309}
   - component: {fileID: 1917175319250461492}
   - component: {fileID: 375108421017614229}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (magic02)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6954337202122270391}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1395621750542523071}
   - component: {fileID: 796523210536162808}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: AttackRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,11 +198,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3482228932493309922}
-  - component: {fileID: 6299886670272029998}
   - component: {fileID: 3097279946061559395}
-  m_Layer: 0
+  - component: {fileID: 6299886670272029998}
+  - component: {fileID: 866801304025860549}
+  m_Layer: 10
   m_Name: Magic
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,23 +222,10 @@ Transform:
   - {fileID: 4694799986741599895}
   - {fileID: 1395621750542523071}
   - {fileID: 6954337202122270391}
+  - {fileID: 215650659257255485}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6299886670272029998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2404044788334449908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 085230ffe7f0eba4a803d96f06d93854, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spineLevelParent: {fileID: 4694799986741599895}
-  magicBullet: {fileID: 6084831997136509206}
 --- !u!50 &3097279946061559395
 Rigidbody2D:
   serializedVersion: 4
@@ -259,6 +247,90 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6299886670272029998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2404044788334449908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 085230ffe7f0eba4a803d96f06d93854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spineLevelParent: {fileID: 4694799986741599895}
+  magicBullet: {fileID: 6084831997136509206}
+--- !u!114 &866801304025860549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2404044788334449908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ccae39a49ecb4640b04168d0c04d47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerPlacementIndex: 0
+--- !u!1 &2598312534106086854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 215650659257255485}
+  - component: {fileID: 3779381323261667522}
+  m_Layer: 10
+  m_Name: Collider
+  m_TagString: Tower
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &215650659257255485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2598312534106086854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3482228932493309922}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &3779381323261667522
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2598312534106086854}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.039029762, y: 0.3122381}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.92194045, y: 1.056771}
+  m_EdgeRadius: 0
 --- !u!1 &3259072431812669926
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8689586396006788138}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4471711469692850283}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +405,7 @@ GameObject:
   - component: {fileID: 432842981995176211}
   - component: {fileID: 8041056144030894506}
   - component: {fileID: 2577688759528912983}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (magic01)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +516,7 @@ GameObject:
   - component: {fileID: 3645892208697212939}
   - component: {fileID: 7461281483131523572}
   - component: {fileID: 5174660019298207351}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (magic03-1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 584426743742394898}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +655,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7134447415569914485}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lv3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -617,7 +689,7 @@ GameObject:
   - component: {fileID: 2242324643123490383}
   - component: {fileID: 334616417536155337}
   - component: {fileID: 3639319847624441495}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine GameObject (magic04-1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,7 +797,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4694799986741599895}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -812,6 +884,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3663863852179999928, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3663873138566668631, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
         type: 3}
       propertyPath: m_Name
@@ -819,20 +896,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3663873138566668631, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
         type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3663873138566668631, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3663899548862710387, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bdc235c540ceda49ba89e5f53a2bb6b, type: 3}
---- !u!1 &6084831997136509206 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3663873138566668631, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
-    type: 3}
-  m_PrefabInstance: {fileID: 7397473839474292801}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6080436414234677733 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3660045473685891492, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7397473839474292801}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6084831997136509206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3663873138566668631, guid: 0bdc235c540ceda49ba89e5f53a2bb6b,
     type: 3}
   m_PrefabInstance: {fileID: 7397473839474292801}
   m_PrefabAsset: {fileID: 0}
