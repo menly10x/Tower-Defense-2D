@@ -99,20 +99,22 @@ public class GameplayController : MonoBehaviour
                     else
                     {
                         UIController.instance.CloseBtnBuyTower();
-                    }
 
-                    hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerLayer);
-                    if (hit.collider != null)
-                    {
-                        if (hit.collider.tag.Equals("Tower"))
+                        hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerLayer);
+                        if (hit.collider != null)
                         {
-                            UIController.instance.OpenBtnUpgradeTower(hit.collider.transform, hit.collider.gameObject.transform.parent.gameObject);
+                            if (hit.collider.tag.Equals("Tower"))
+                            {
+                                UIController.instance.OpenBtnUpgradeTower(hit.collider.transform, hit.collider.gameObject.transform.parent.gameObject);
+                            }
+                        }
+                        else
+                        {
+                            UIController.instance.CloseBtnUpgradeTower();
                         }
                     }
-                    else
-                    {
-                        UIController.instance.CloseBtnUpgradeTower();
-                    }
+
+                    
                 }
             }
 
