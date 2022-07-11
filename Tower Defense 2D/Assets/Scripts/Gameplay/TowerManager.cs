@@ -41,11 +41,6 @@ public class TowerManager : MonoBehaviour
 
     public IEnumerator UpgradeTower(GameObject tower)
     {
-        GameObject effectSpawn = Instantiate(effectSpawnTower);
-        effectSpawn.transform.position = tower.transform.position;
-
-        yield return new WaitForSeconds(0.4f);
-
         Transform towerLevel = tower.transform.GetChild(0);
         for (int i = 0; i < towerLevel.childCount - 1; i++)
         {
@@ -53,6 +48,11 @@ public class TowerManager : MonoBehaviour
             {
                 if (towerLevel.GetChild(i + 1) != null)
                 {
+                    GameObject effectSpawn = Instantiate(effectSpawnTower);
+                    effectSpawn.transform.position = tower.transform.position;
+
+                    yield return new WaitForSeconds(0.4f);
+
                     towerLevel.GetChild(i).gameObject.SetActive(false);
                     towerLevel.GetChild(i + 1).gameObject.SetActive(true);
                     break;
