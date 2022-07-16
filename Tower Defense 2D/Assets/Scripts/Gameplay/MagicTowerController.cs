@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MagicTowerController : MonoBehaviour
 {
-    int level;
+    public int level;
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
@@ -47,17 +47,7 @@ public class MagicTowerController : MonoBehaviour
         else
         {
             countDown = 1.2f;
-            magicBullet.transform.localPosition = new Vector3(0, 0, 0);
-
-            magicBullet.SetActive(true);
-            magicBullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                magicBullet.SetActive(false);
-                if (monster.GetComponentInParent<MonsterController>().Health > 0)
-                {
-                    monster.GetComponentInParent<MonsterController>().Health -= damage;
-                }
-            });
+            StartCoroutine(SetShoot(monster));
         }
     }
 
@@ -99,11 +89,27 @@ public class MagicTowerController : MonoBehaviour
         skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
 
-    void SetAttack(int level)
+    IEnumerator SetShoot(GameObject monster)
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack", false);
+        Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "attack", false);
+
+        magicBullet.transform.localPosition = new Vector3(0, 0, 0);
+
+        magicBullet.SetActive(true);
+        magicBullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            magicBullet.SetActive(false);
+            if (monster.GetComponentInParent<MonsterController>().Health > 0)
+            {
+                monster.GetComponentInParent<MonsterController>().Health -= damage;
+            }
+        });
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
 
 }

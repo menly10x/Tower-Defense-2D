@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class ArcherTowerController : MonoBehaviour
 {
-    int level;
+    public int level;
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
@@ -47,23 +47,7 @@ public class ArcherTowerController : MonoBehaviour
         else
         {
             countDown = 1.2f;
-            arrow.transform.localPosition = new Vector3(0, 0, 0);
-
-            Vector3 direct = monster.transform.position - arrow.transform.position;
-
-            float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
-
-            arrow.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
-            arrow.SetActive(true);
-            arrow.transform.DOMove(monster.transform.position, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                arrow.SetActive(false);
-                if (monster.GetComponentInParent<MonsterController>().Health > 0)
-                {
-                    monster.GetComponentInParent<MonsterController>().Health -= damage;
-                }
-            });
+            StartCoroutine(SetShoot(monster));
         }
     }
 
@@ -105,24 +89,35 @@ public class ArcherTowerController : MonoBehaviour
         skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
 
-    void SetAttackStart(int level)
+    IEnumerator SetShoot(GameObject monster)
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack_start", true);
-    }
+        Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "attack_start", false);
 
-    void SetAttackIdle(int level)
-    {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
         skeletonAnimation.state.SetAnimation(0, "attack_idle", true);
+
+        arrow.transform.localPosition = new Vector3(0, 0, 0);
+        Vector3 direct = monster.transform.position - arrow.transform.position;
+        float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
+        arrow.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        arrow.SetActive(true);
+        arrow.transform.DOMove(monster.transform.position, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            arrow.SetActive(false);
+            if (monster.GetComponentInParent<MonsterController>().Health > 0)
+            {
+                monster.GetComponentInParent<MonsterController>().Health -= damage;
+            }
+
+            trackEntry = skeletonAnimation.state.SetAnimation(0, "attack_end", false);
+        });
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
 
-    void SetAttackEnd(int level)
-    {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack_end", true);
-    }
 }
