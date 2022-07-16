@@ -53,7 +53,10 @@ public class CanonTowerController : MonoBehaviour
             bullet.transform.DOJump(monster.transform.position, 1f, 1, 1f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 bullet.SetActive(false);
-                monster.GetComponentInParent<MonsterController>().Health -= damage;
+                if (monster.GetComponentInParent<MonsterController>().Health > 0)
+                {
+                    monster.GetComponentInParent<MonsterController>().Health -= damage;
+                }
             });
         }
     }
@@ -63,6 +66,21 @@ public class CanonTowerController : MonoBehaviour
         if (target.gameObject.tag.Equals("Monster"))
         {
             monsters.Add(target.gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D target)
+    {
+        if (target.gameObject.tag.Equals("Monster"))
+        {
+            GameObject monster = target.gameObject;
+            if (monster.GetComponentInParent<MonsterController>().Health <= 0)
+            {
+                if (monsters.IndexOf(monster) >= 0)
+                {
+                    monsters.Remove(monster);
+                }
+            }
         }
     }
 

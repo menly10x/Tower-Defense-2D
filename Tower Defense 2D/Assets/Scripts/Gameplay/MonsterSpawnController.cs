@@ -20,12 +20,24 @@ public class MonsterSpawnController : MonoBehaviour
     public GameObject[] leader;
     public GameObject[] normal;
 
-    int waveSpawn = 1;
     int totalTurnSpawn = 10;
     float timeBetweenWave = 5f;
     float countDown = 5f;
     bool isDoneSpawn = true;
 
+    private int waveSpawn;
+    public int WaveSpawn
+    {
+        get
+        {
+            return waveSpawn;
+        }
+        set
+        {
+            waveSpawn = value;
+            UIController.instance.txtWave.text = waveSpawn.ToString();
+        }
+    }
 
     private void Awake()
     {
@@ -38,7 +50,7 @@ public class MonsterSpawnController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        WaveSpawn = 1;
     }
 
     // Update is called once per frame
@@ -89,7 +101,7 @@ public class MonsterSpawnController : MonoBehaviour
         }
 
         totalTurnSpawn += 2;
-        waveSpawn++;
+        WaveSpawn++;
         isDoneSpawn = true;
     }
 
@@ -97,20 +109,20 @@ public class MonsterSpawnController : MonoBehaviour
     {
         monsters = new List<GameObject>();
         paths = new List<Transform>();
-        if (waveSpawn <= 10)
+        if (WaveSpawn <= 10)
         {
             AddLeaderMonster(1);
             AddNormalMonster(3);
             AddWay1Path();
         }
-        else if (waveSpawn > 10 && waveSpawn <= 20)
+        else if (WaveSpawn > 10 && WaveSpawn <= 20)
         {
             AddLeaderMonster(1);
             AddNormalMonster(10);
             AddWay1Path();
             AddWay2Path();
         }
-        else if (waveSpawn > 20 && waveSpawn <= 30)
+        else if (WaveSpawn > 20 && WaveSpawn <= 30)
         {
             AddBossMonster(1);
             AddLeaderMonster(1);
@@ -119,7 +131,7 @@ public class MonsterSpawnController : MonoBehaviour
             AddWay2Path();
             AddWay3Path();
         }
-        else if (waveSpawn > 30)
+        else if (WaveSpawn > 30)
         {
             AddBossMonster(2);
             AddLeaderMonster(2);

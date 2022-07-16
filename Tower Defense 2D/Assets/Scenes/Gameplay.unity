@@ -7683,6 +7683,9 @@ MonoBehaviour:
   btnBuyTower: {fileID: 196712314}
   btnUpgradeTower: {fileID: 841286507}
   towerPlacementIndex: 0
+  txtWave: {fileID: 1684302645}
+  txtHealth: {fileID: 1390311163}
+  txtWood: {fileID: 1936462654}
 --- !u!4 &1180773777
 Transform:
   m_ObjectHideFlags: 0
