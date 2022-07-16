@@ -28,9 +28,14 @@ public class MonsterController : MonoBehaviour
             slider.value = health;
             if (health <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(SetDeath());
             }
         }
+    }
+
+    private void Awake()
+    {
+        slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
     }
 
     // Start is called before the first frame update
@@ -85,5 +90,25 @@ public class MonsterController : MonoBehaviour
     {
         skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
         skeletonAnimation.state.SetAnimation(0, "walk", true);
+    }
+
+    IEnumerator SetDeath()
+    {
+        transform.DOKill();
+
+        skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
+        Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "death", false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        skeletonAnimation.state.SetAnimation(0, "death_idle", true);
+
+        yield return new WaitForSeconds(1f);
+
+        trackEntry = skeletonAnimation.state.SetAnimation(0, "death_end", false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        Destroy(gameObject);
     }
 }

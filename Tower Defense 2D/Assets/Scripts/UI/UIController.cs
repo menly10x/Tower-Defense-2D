@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class UIController : MonoBehaviour
     [SerializeField]
     int towerPlacementIndex;
     GameObject currentTower;
+
+    public Text txtWave;
+    public Text txtHealth;
+    public Text txtWood;
 
     private void Awake()
     {

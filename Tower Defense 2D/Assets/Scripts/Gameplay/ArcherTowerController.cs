@@ -59,7 +59,10 @@ public class ArcherTowerController : MonoBehaviour
             arrow.transform.DOMove(monster.transform.position, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 arrow.SetActive(false);
-                monster.GetComponentInParent<MonsterController>().Health -= damage;
+                if (monster.GetComponentInParent<MonsterController>().Health > 0)
+                {
+                    monster.GetComponentInParent<MonsterController>().Health -= damage;
+                }
             });
         }
     }
@@ -69,6 +72,21 @@ public class ArcherTowerController : MonoBehaviour
         if (target.gameObject.tag.Equals("Monster"))
         {
             monsters.Add(target.gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D target)
+    {
+        if (target.gameObject.tag.Equals("Monster"))
+        {
+            GameObject monster = target.gameObject;
+            if (monster.GetComponentInParent<MonsterController>().Health <= 0)
+            {
+                if (monsters.IndexOf(monster) >= 0)
+                {
+                    monsters.Remove(monster);
+                }
+            }
         }
     }
 
