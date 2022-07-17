@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Spine.Unity;
 using UnityEngine.UI;
+using System;
 
 public class MonsterController : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class MonsterController : MonoBehaviour
     public Slider slider;
     public Vector3 offset;
 
-    private int health;
-    public int Health
+    private float health;
+    public float Health
     {
         get
         {
@@ -110,5 +111,10 @@ public class MonsterController : MonoBehaviour
         yield return new WaitForSpineAnimationComplete(trackEntry);
 
         Destroy(gameObject);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Health = Math.Max(0, Health - damage);
     }
 }

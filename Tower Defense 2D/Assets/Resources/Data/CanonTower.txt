@@ -1,0 +1,34 @@
+[
+ {
+   "Level": 1,
+   "Damage": 10,
+   "FireRate": 5,
+   "FireRange": 1.5,
+   "BuyPrice": 100,
+   "SellPrice": 50
+ },
+ {
+   "Level": 2,
+   "Damage": 20,
+   "FireRate": 4,
+   "FireRange": 1.5,
+   "BuyPrice": 200,
+   "SellPrice": 100
+ },
+ {
+   "Level": 3,
+   "Damage": 30,
+   "FireRate": 3,
+   "FireRange": 2,
+   "BuyPrice": 300,
+   "SellPrice": 150
+ },
+ {
+   "Level": 4,
+   "Damage": 40,
+   "FireRate": 2,
+   "FireRange": 2,
+   "BuyPrice": 400,
+   "SellPrice": 200
+ }
+]

@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using SimpleJSON;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,20 +7,38 @@ using UnityEngine;
 
 public class MagicTowerController : MonoBehaviour
 {
-    public int level;
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
     public GameObject magicBullet;
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0f;
-    int damage = 5;
+
+    private int level;
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            level = value;
+            LoadDataTower();
+        }
+    }
+
+    private float damage;
+    private float fireRate;
+    private float fireRange;
+    private float buyPrice;
+    private float sellPrice;
 
     // Start is called before the first frame update
     void Start()
     {
-        level = 1;
-        SetIdle(level);
+        Level = 1;
+        SetIdle(Level);
     }
 
     // Update is called once per frame
@@ -34,6 +53,29 @@ public class MagicTowerController : MonoBehaviour
             else
             {
                 monsters.RemoveAt(0);
+            }
+        }
+    }
+
+    public JSONNode loadTextData(string path)
+    {
+        TextAsset txt = (TextAsset)Resources.Load(path, typeof(TextAsset));
+
+        return JSONArray.Parse(txt.text);
+    }
+
+    public void LoadDataTower()
+    {
+        JSONNode jsonNode = loadTextData("Data/MagicTower");
+        foreach (JSONNode node in jsonNode)
+        {
+            if (Level == node["Level"].AsInt)
+            {
+                damage = node["Damage"].AsFloat;
+                fireRate = node["FireRate"].AsFloat;
+                fireRange = node["FireRange"].AsFloat;
+                buyPrice = node["BuyPrice"].AsFloat;
+                sellPrice = node["SellPrice"].AsFloat;
             }
         }
     }
@@ -91,7 +133,7 @@ public class MagicTowerController : MonoBehaviour
 
     IEnumerator SetShoot(GameObject monster)
     {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
+        Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
         Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "attack", false);
 
@@ -103,7 +145,7 @@ public class MagicTowerController : MonoBehaviour
             magicBullet.SetActive(false);
             if (monster.GetComponentInParent<MonsterController>().Health > 0)
             {
-                monster.GetComponentInParent<MonsterController>().Health -= damage;
+                monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
             }
         });
 

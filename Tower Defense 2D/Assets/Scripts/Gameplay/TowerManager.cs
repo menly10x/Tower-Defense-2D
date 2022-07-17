@@ -57,15 +57,15 @@ public class TowerManager : MonoBehaviour
                     towerLevel.GetChild(i + 1).gameObject.SetActive(true);
                     if (tower.GetComponent<ArcherTowerController>() != null)
                     {
-                        tower.GetComponent<ArcherTowerController>().level++;
+                        tower.GetComponent<ArcherTowerController>().Level++;
                     }
                     else if (tower.GetComponent<CanonTowerController>() != null)
                     {
-                        tower.GetComponent<CanonTowerController>().level++;
+                        tower.GetComponent<CanonTowerController>().Level++;
                     }
                     else if (tower.GetComponent<MagicTowerController>() != null)
                     {
-                        tower.GetComponent<MagicTowerController>().level++;
+                        tower.GetComponent<MagicTowerController>().Level++;
                     }
                     break;
                 }

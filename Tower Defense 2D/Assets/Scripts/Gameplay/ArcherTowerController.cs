@@ -3,23 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 using DG.Tweening;
+using SimpleJSON;
 
 public class ArcherTowerController : MonoBehaviour
 {
-    public int level;
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
     List<GameObject> monsters = new List<GameObject>();
     public GameObject arrow;
     float countDown = 0f;
-    int damage = 5;
+
+    private int level;
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            level = value;
+            LoadDataTower();
+        }
+    }
+
+    private float damage;
+    private float fireRate;
+    private float fireRange;
+    private float buyPrice;
+    private float sellPrice;
 
     // Start is called before the first frame update
     void Start()
     {
-        level = 1;
-        SetIdle(level);
+        Level = 1;
+        SetIdle(Level);
     }
 
     // Update is called once per frame
@@ -34,6 +53,29 @@ public class ArcherTowerController : MonoBehaviour
             else
             {
                 monsters.RemoveAt(0);
+            }
+        }
+    }
+
+    public JSONNode loadTextData(string path)
+    {
+        TextAsset txt = (TextAsset)Resources.Load(path, typeof(TextAsset));
+
+        return JSONArray.Parse(txt.text);
+    }
+
+    public void LoadDataTower()
+    {
+        JSONNode jsonNode = loadTextData("Data/ArcherTower");
+        foreach (JSONNode node in jsonNode)
+        {
+            if (Level == node["Level"].AsInt)
+            {
+                damage = node["Damage"].AsFloat;
+                fireRate = node["FireRate"].AsFloat;
+                fireRange = node["FireRange"].AsFloat;
+                buyPrice = node["BuyPrice"].AsFloat;
+                sellPrice = node["SellPrice"].AsFloat;
             }
         }
     }
@@ -91,7 +133,7 @@ public class ArcherTowerController : MonoBehaviour
 
     IEnumerator SetShoot(GameObject monster)
     {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
+        Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
         Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "attack_start", false);
 
@@ -109,7 +151,7 @@ public class ArcherTowerController : MonoBehaviour
             arrow.SetActive(false);
             if (monster.GetComponentInParent<MonsterController>().Health > 0)
             {
-                monster.GetComponentInParent<MonsterController>().Health -= damage;
+                monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
             }
 
             trackEntry = skeletonAnimation.state.SetAnimation(0, "attack_end", false);
