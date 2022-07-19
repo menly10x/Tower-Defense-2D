@@ -3238,8 +3238,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1180773776}
-        m_MethodName: ButtonBuyTower
-        m_Mode: 3
+        m_MethodName: ButtonSellTower
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5735,7 +5735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 841286508}
   m_Layer: 5
-  m_Name: ButtonUpgradeTower
+  m_Name: ButtonUpgradeAndSellTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6254,6 +6254,49 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &921461731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 921461733}
+  - component: {fileID: 921461732}
+  m_Layer: 0
+  m_Name: PlayerSetting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &921461732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921461731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a73746dddc65f8a4081a33bce68bfaa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &921461733
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921461731}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &924463784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7394,7 +7437,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1159089168
 GameObject:
@@ -7681,11 +7724,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnBuyTower: {fileID: 196712314}
-  btnUpgradeTower: {fileID: 841286507}
+  btnUpgradeAndSellTower: {fileID: 841286507}
+  btnUpgradeTower: {fileID: 1305946882}
+  btnSellTower: {fileID: 512819593}
   towerPlacementIndex: 0
   txtWave: {fileID: 1684302645}
   txtHealth: {fileID: 1390311163}
   txtWood: {fileID: 1936462654}
+  btnBuyCanonTower: {fileID: 908506877}
+  btnBuyArcherTower: {fileID: 520598505}
+  btnBuyMagicTower: {fileID: 302141793}
+  btnBuyLightningTower: {fileID: 104168690}
 --- !u!4 &1180773777
 Transform:
   m_ObjectHideFlags: 0
@@ -7698,7 +7747,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1195837393
 GameObject:
@@ -8411,7 +8460,7 @@ RectTransform:
   m_Children:
   - {fileID: 1818370628}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11959,6 +12008,10 @@ MonoBehaviour:
     type: 3}
   effectSpawnTower: {fileID: 1753044329413552666, guid: f42b97879c7ca694284588d87b06945f,
     type: 3}
+  canonPrice: 0
+  archerPrice: 0
+  magicPrice: 0
+  lightningPrice: 0
 --- !u!114 &1813817840
 MonoBehaviour:
   m_ObjectHideFlags: 0

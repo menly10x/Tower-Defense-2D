@@ -36,7 +36,8 @@ public class MagicTowerController : MonoBehaviour
     private float damage;
     private float fireRate;
     private float fireRange;
-    private float price;
+    public float price;
+    public float priceToUpgrade;
 
     // Start is called before the first frame update
     void Start()
@@ -79,6 +80,10 @@ public class MagicTowerController : MonoBehaviour
                 fireRate = node["FireRate"].AsFloat;
                 fireRange = node["FireRange"].AsFloat;
                 price = node["Price"].AsFloat;
+            }
+            if (node["Level"].AsInt == (Level + 1))
+            {
+                priceToUpgrade = node["Price"].AsFloat;
             }
         }
     }
