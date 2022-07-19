@@ -5,16 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MagicTowerController : MonoBehaviour
+public class LightningTowerController : MonoBehaviour
 {
     public Transform spineLevelParent;
-    SkeletonAnimation skeletonAnimation;
 
-    public Transform bulletParent;
-    public GameObject magicBullet1;
-    public GameObject magicBullet2;
-    public GameObject magicBullet3;
-    float bulletSpeed = 5f;
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0f;
 
@@ -43,7 +37,6 @@ public class MagicTowerController : MonoBehaviour
     void Start()
     {
         Level = 1;
-        
     }
 
     // Update is called once per frame
@@ -53,7 +46,7 @@ public class MagicTowerController : MonoBehaviour
         {
             if (monsters[0] != null)
             {
-                Shoot(monsters[0]);
+                Shoot();
             }
             else
             {
@@ -71,7 +64,7 @@ public class MagicTowerController : MonoBehaviour
 
     public void LoadDataTower()
     {
-        JSONNode jsonNode = loadTextData("Data/MagicTower");
+        JSONNode jsonNode = loadTextData("Data/LightningTower");
         foreach (JSONNode node in jsonNode)
         {
             if (Level == node["Level"].AsInt)
@@ -88,7 +81,7 @@ public class MagicTowerController : MonoBehaviour
         }
     }
 
-    void Shoot(GameObject monster)
+    void Shoot()
     {
         if (countDown > 0)
         {
@@ -96,7 +89,7 @@ public class MagicTowerController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(SetShoot(monster));
+            StartCoroutine(SetShoot());
         }
     }
 
@@ -133,55 +126,37 @@ public class MagicTowerController : MonoBehaviour
 
     void SetIdle()
     {
-        Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "idle", true);
+        Transform spineLevel = spineLevelParent.GetChild(Level - 1);
+        foreach(Transform spine in spineLevel)
+        {
+            spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "idle", true);
+        }
     }
 
-    IEnumerator SetShoot(GameObject monster)
+    IEnumerator SetShoot()
     {
         countDown = fireRate;
 
-        Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
-        skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        skeletonAnimation.state.SetAnimation(0, "attack", false);
+        Spine.TrackEntry trackEntry = new Spine.TrackEntry();
 
-        GameObject bullet;
-
-        switch (Level)
+        Transform spineLevel = spineLevelParent.GetChild(Level - 1);
+        foreach (Transform spine in spineLevel)
         {
-            case 1:
-                bullet = Instantiate(magicBullet1, bulletParent);
-                break;
-            case 2:
-            case 4:
-                bullet = Instantiate(magicBullet2, bulletParent);
-                break;
-            case 3:
-                bullet = Instantiate(magicBullet3, bulletParent);
-                break;
-            default:
-                bullet = Instantiate(magicBullet1, bulletParent);
-                break;
+            trackEntry = spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "attack", false);
         }
 
-        bullet.transform.localPosition = new Vector3(0, 0, 0);
+        yield return new WaitForSeconds(0.8f);
 
-        float distance = Vector2.Distance(bullet.transform.position, monster.transform.position);
-        float time = distance / bulletSpeed;
-
-        bullet.transform.DOMove(monster.transform.position, time).SetEase(Ease.Linear);
-
-        yield return new WaitForSeconds(time);
-
-        Destroy(bullet);
-
-        if (monster.GetComponentInParent<MonsterController>().Health > 0)
+        foreach (GameObject monster in monsters)
         {
-            monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
+            if (monster.GetComponentInParent<MonsterController>().Health > 0)
+            {
+                monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
+            }
         }
 
-        skeletonAnimation.state.SetAnimation(0, "idle", true);
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        SetIdle();
     }
-
 }

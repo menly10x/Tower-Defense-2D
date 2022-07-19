@@ -23,7 +23,7 @@ public class MonsterSpawnController : MonoBehaviour
     int totalTurnSpawn = 10;
     float timeBetweenWave = 5f;
     float countDown = 5f;
-    bool isDoneSpawn = true;
+    public bool isDoneSpawn = true;
 
     private int waveSpawn;
     public int WaveSpawn

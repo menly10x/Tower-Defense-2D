@@ -15,6 +15,8 @@ public class MonsterController : MonoBehaviour
     public Slider slider;
     public Vector3 offset;
 
+    Color defaultColor;
+
     private float health;
     public float Health
     {
@@ -37,6 +39,7 @@ public class MonsterController : MonoBehaviour
     private void Awake()
     {
         slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
+        skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
     }
 
     // Start is called before the first frame update
@@ -44,12 +47,17 @@ public class MonsterController : MonoBehaviour
     {
         Health = 100;
         Move();
+        defaultColor = skeletonAnimation.skeleton.GetColor();
     }
 
     // Update is called once per frame
     void Update()
     {
         slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
+        if (PlayerSetting.instance.Health == 0)
+        {
+            transform.DOKill();
+        }
     }
 
     public void Move()
@@ -58,6 +66,7 @@ public class MonsterController : MonoBehaviour
         float timeToMove = CalculateDistance(wayPoints) / moveSpeed;
         transform.DOPath(wayPoints, timeToMove, PathType.Linear, PathMode.TopDown2D, 0, Color.red).SetEase(Ease.Linear).OnWaypointChange(MyCallBack).OnComplete(() =>
         {
+            PlayerSetting.instance.Health = Math.Max(0, PlayerSetting.instance.Health - 1);
             Destroy(gameObject);
         });
     }
@@ -89,7 +98,6 @@ public class MonsterController : MonoBehaviour
 
     void SetWalk()
     {
-        skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
         skeletonAnimation.state.SetAnimation(0, "walk", true);
     }
 
@@ -97,7 +105,6 @@ public class MonsterController : MonoBehaviour
     {
         transform.DOKill();
 
-        skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
         Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "death", false);
 
         yield return new WaitForSpineAnimationComplete(trackEntry);
@@ -116,5 +123,12 @@ public class MonsterController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         Health = Math.Max(0, Health - damage);
+        skeletonAnimation.skeleton.SetColor(Color.red);
+        Invoke("SetDefaultColor", 0.1f);
+    }
+
+    void SetDefaultColor()
+    {
+        skeletonAnimation.skeleton.SetColor(defaultColor);
     }
 }
