@@ -11949,7 +11949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerParent: {fileID: 1201865942}
   towerPlacementParent: {fileID: 398481201}
-  barackTower: {fileID: 4722705662661756697, guid: c70c5866e9889b84b8b93faac1f86be3,
+  barackTower: {fileID: 5006435903089041167, guid: 8f267f40fd6b091439f73f8d3fbc1772,
     type: 3}
   archerTower: {fileID: 6277691435340428955, guid: 63ef48e9e3326ce47bb568ef908e1d3d,
     type: 3}

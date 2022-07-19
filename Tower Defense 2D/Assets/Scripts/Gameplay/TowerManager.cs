@@ -67,6 +67,10 @@ public class TowerManager : MonoBehaviour
                     {
                         tower.GetComponent<MagicTowerController>().Level++;
                     }
+                    else if (tower.GetComponent<LightningTowerController>() != null)
+                    {
+                        tower.GetComponent<LightningTowerController>().Level++;
+                    }
                     break;
                 }
             }
