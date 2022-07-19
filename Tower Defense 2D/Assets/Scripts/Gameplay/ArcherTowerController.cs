@@ -31,8 +31,7 @@ public class ArcherTowerController : MonoBehaviour
     private float damage;
     private float fireRate;
     private float fireRange;
-    private float buyPrice;
-    private float sellPrice;
+    private float price;
 
     // Start is called before the first frame update
     void Start()
@@ -74,8 +73,7 @@ public class ArcherTowerController : MonoBehaviour
                 damage = node["Damage"].AsFloat;
                 fireRate = node["FireRate"].AsFloat;
                 fireRange = node["FireRange"].AsFloat;
-                buyPrice = node["BuyPrice"].AsFloat;
-                sellPrice = node["SellPrice"].AsFloat;
+                price = node["Price"].AsFloat;
             }
         }
     }

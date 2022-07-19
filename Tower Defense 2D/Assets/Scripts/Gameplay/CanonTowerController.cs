@@ -4,16 +4,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
-using System;
 
 public class CanonTowerController : MonoBehaviour
 {
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
-    public GameObject bullet1;
+    public Transform bulletParent;
+    public GameObject bomb;
+    public GameObject missile;
     List<GameObject> monsters = new List<GameObject>();
-    float countDown = 0f;
+    float countDown = 0;
 
     SkeletonAnimation effectShoot;
 
@@ -21,6 +22,13 @@ public class CanonTowerController : MonoBehaviour
 
     IEnumerator idleAnimCoroutine;
     bool isIdle = false;
+
+    public Transform bulletParentLevel3_1;
+    public Transform bulletParentLevel3_2;
+    public Transform bulletParentLevel4_1;
+    public Transform bulletParentLevel4_2;
+    public Transform bulletParentLevel4_3;
+    public Transform bulletParentLevel4_4;
 
     private int level;
     public int Level
@@ -33,20 +41,19 @@ public class CanonTowerController : MonoBehaviour
         {
             level = value;
             LoadDataTower();
+            SetIdle();
         }
     }
 
     private float damage;
     private float fireRate;
     private float fireRange;
-    private float buyPrice;
-    private float sellPrice;
+    private float price;
 
     // Start is called before the first frame update
     void Start()
     {
         Level = 1;
-        SetIdle(Level);
 
         angles.Add(0);
         angles.Add(45);
@@ -56,6 +63,7 @@ public class CanonTowerController : MonoBehaviour
         angles.Add(225);
         angles.Add(270);
         angles.Add(315);
+        countDown = fireRate;
     }
 
     // Update is called once per frame
@@ -74,7 +82,7 @@ public class CanonTowerController : MonoBehaviour
         }
         else if (!isIdle)
         {
-            SetIdle(Level);
+            SetIdle();
         }
     }
 
@@ -95,8 +103,7 @@ public class CanonTowerController : MonoBehaviour
                 damage = node["Damage"].AsFloat;
                 fireRate = node["FireRate"].AsFloat;
                 fireRange = node["FireRange"].AsFloat;
-                buyPrice = node["BuyPrice"].AsFloat;
-                sellPrice = node["SellPrice"].AsFloat;
+                price = node["Price"].AsFloat;
             }
         }
     }
@@ -110,7 +117,7 @@ public class CanonTowerController : MonoBehaviour
         }
         else
         {
-            countDown = 1.2f;
+            
             StartCoroutine(SetShoot(monster));
         }
     }
@@ -146,7 +153,7 @@ public class CanonTowerController : MonoBehaviour
         }
     }
 
-    void SetIdle(int level)
+    void SetIdle()
     {
         isIdle = true;
 
@@ -155,24 +162,29 @@ public class CanonTowerController : MonoBehaviour
 
         if (level < 3)
         {
+            spineLevelParent.GetChild(level - 1).GetChild(1).GetComponent<SkeletonAnimation>().state.SetAnimation(0, "idle", true);
             idleAnimCoroutine = SetIdleLoop(skeletonAnimation, 0.1f);
             StartCoroutine(idleAnimCoroutine);
         }
         else
         {
-            skeletonAnimation.state.SetAnimation(0, "idle", true);
+            spineLevel = spineLevelParent.GetChild(level - 1);
+
+            foreach (Transform spine in spineLevel)
+            {
+                spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "idle", true);
+            }
         }
     }
 
     IEnumerator SetShoot(GameObject monster)
     {
+        countDown = fireRate;
         Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        effectShoot = spineLevelParent.GetChild(Level - 1).GetChild(2).GetComponent<SkeletonAnimation>();
 
         if (Level < 3)
         {
-
             StopCoroutine(idleAnimCoroutine);
 
             Vector3 direct = monster.transform.position - transform.position;
@@ -217,30 +229,30 @@ public class CanonTowerController : MonoBehaviour
                     break;
             }
 
+            spineLevelParent.GetChild(level - 1).GetChild(1).GetComponent<SkeletonAnimation>().state.SetAnimation(0, "attack", true);
+            effectShoot = spineLevelParent.GetChild(Level - 1).GetChild(2).GetComponent<SkeletonAnimation>();
             effectShoot.state.SetAnimation(0, "play", false);
 
             yield return null;
 
-            bullet1.transform.localPosition = new Vector3(0, 0, 0);
+            GameObject bullet = Instantiate(bomb, bulletParent);
+            bullet.transform.localPosition = new Vector3(0, 0, 0);
 
-            bullet1.SetActive(true);
-            bullet1.transform.GetChild(0).gameObject.SetActive(true);
-            bullet1.transform.GetChild(3).gameObject.SetActive(true);
-            Transform effectHit = bullet1.transform.GetChild(2);
-            effectHit.gameObject.SetActive(false);
-            bullet1.transform.DOJump(monster.transform.position, 1f, 1, 1f).SetEase(Ease.Linear);
+            bullet.transform.DOJump(monster.transform.position, 1f, 1, 1f).SetEase(Ease.Linear);
 
             yield return new WaitForSeconds(1f);
 
-            bullet1.transform.GetChild(0).gameObject.SetActive(false);
+            bullet.transform.GetChild(0).gameObject.SetActive(false);
+            bullet.transform.GetChild(1).gameObject.SetActive(false);
 
+            Transform effectHit = bullet.transform.GetChild(2);
             effectHit.gameObject.SetActive(true);
             SkeletonAnimation effectHit1 = effectHit.GetChild(0).GetComponent<SkeletonAnimation>();
             SkeletonAnimation effectHit2 = effectHit.GetChild(1).GetComponent<SkeletonAnimation>();
             Spine.TrackEntry trackEntry = effectHit1.state.SetAnimation(0, "hit", false);
             effectHit2.state.SetAnimation(0, "hit", false);
 
-            foreach (GameObject monsterTakeDamage in bullet1.GetComponent<CanonBulletController>().monsters)
+            foreach (GameObject monsterTakeDamage in bullet.GetComponent<CanonBulletController>().monsters)
             {
                 if (monsterTakeDamage.GetComponentInParent<MonsterController>().Health > 0)
                 {
@@ -248,16 +260,182 @@ public class CanonTowerController : MonoBehaviour
                 }
             }
 
-            bullet1.transform.GetChild(3).gameObject.SetActive(false);
+            bullet.transform.GetChild(3).gameObject.SetActive(false);
 
             yield return new WaitForSpineAnimationComplete(trackEntry);
 
-            bullet1.SetActive(false);
+            Destroy(bullet);
+        }
+        else if (level < 4)
+        {
+            StartCoroutine(DelayShootLv3(0, monster));
+            StartCoroutine(DelayShootLv3(1, monster));
         }
         else
         {
-
+            StartCoroutine(DelayShootLv4(0, monster));
+            StartCoroutine(DelayShootLv4(1, monster));
+            StartCoroutine(DelayShootLv4(2, monster));
+            StartCoroutine(DelayShootLv4(3, monster));
         }
+    }
+
+    IEnumerator DelayShootLv3(int i, GameObject monster)
+    {
+        Transform spineLevel = spineLevelParent.GetChild(level - 1);
+        foreach (Transform spine in spineLevel)
+        {
+            spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "attack", true);
+        }
+
+        GameObject bullet;
+        if (i == 0)
+        {
+            bullet = Instantiate(missile, bulletParentLevel3_1);
+        }
+        else
+        {
+            bullet = Instantiate(missile, bulletParentLevel3_2);
+        }
+
+        bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 1;
+
+        bullet.transform.localPosition = Vector3.zero;
+
+        SkeletonAnimation missileAnim = bullet.transform.GetChild(0).GetComponent<SkeletonAnimation>();
+        Spine.TrackEntry trackEntry = missileAnim.state.SetAnimation(0, "reload", false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        missileAnim.state.SetAnimation(0, "idle", false);
+
+        Vector3 positionUp = new Vector3(bullet.transform.position.x, bullet.transform.position.y + 1, 0);
+
+        Vector3 direct = positionUp - bullet.transform.position;
+        float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
+        bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+
+        bullet.transform.DOMove(positionUp, 1f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        direct = monster.transform.position - positionUp;
+        angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
+        bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+        bullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(0.5f);
+
+        bullet.transform.GetChild(3).gameObject.SetActive(false);
+
+        missileAnim.state.SetAnimation(0, "hit", false);
+
+        Transform effectHit = bullet.transform.GetChild(2);
+        effectHit.gameObject.SetActive(true);
+        SkeletonAnimation effectHit1 = effectHit.GetChild(0).GetComponent<SkeletonAnimation>();
+        SkeletonAnimation effectHit2 = effectHit.GetChild(1).GetComponent<SkeletonAnimation>();
+        trackEntry = effectHit1.state.SetAnimation(0, "hit", false);
+        effectHit2.state.SetAnimation(0, "hit", false);
+
+        foreach (GameObject monsterTakeDamage in bullet.GetComponent<CanonBulletController>().monsters)
+        {
+            if (monsterTakeDamage.GetComponentInParent<MonsterController>().Health > 0)
+            {
+                monsterTakeDamage.GetComponentInParent<MonsterController>().TakeDamage(damage);
+            }
+        }
+
+        bullet.transform.GetChild(1).gameObject.SetActive(false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        Destroy(bullet);
+    }
+
+    IEnumerator DelayShootLv4(int i, GameObject monster)
+    {
+        Transform spineLevel = spineLevelParent.GetChild(level - 1);
+        foreach (Transform spine in spineLevel)
+        {
+            spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "attack", true);
+        }
+
+        GameObject bullet;
+
+        switch (i)
+        {
+            case 0:
+                bullet = Instantiate(missile, bulletParentLevel4_1);
+                bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 1;
+                break;
+            case 1:
+                bullet = Instantiate(missile, bulletParentLevel4_2);
+                bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 1;
+                break;
+            case 2:
+                bullet = Instantiate(missile, bulletParentLevel4_3);
+                bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 3;
+                break;
+            case 3:
+                bullet = Instantiate(missile, bulletParentLevel4_4);
+                bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 3;
+                break;
+            default:
+                bullet = Instantiate(missile, bulletParentLevel4_1);
+                bullet.transform.GetChild(0).GetComponent<MeshRenderer>().sortingOrder = 1;
+                break;
+        }
+
+        bullet.transform.localPosition = Vector3.zero;
+
+        SkeletonAnimation missileAnim = bullet.transform.GetChild(0).GetComponent<SkeletonAnimation>();
+        Spine.TrackEntry trackEntry = missileAnim.state.SetAnimation(0, "reload", false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        missileAnim.state.SetAnimation(0, "idle", false);
+
+        Vector3 positionUp = new Vector3(bullet.transform.position.x, bullet.transform.position.y + 1, 0);
+
+        Vector3 direct = positionUp - bullet.transform.position;
+        float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
+        bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+
+        bullet.transform.DOMove(positionUp, 1f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        direct = monster.transform.position - positionUp;
+        angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
+        bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+        bullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(0.5f);
+
+        bullet.transform.GetChild(3).gameObject.SetActive(false);
+
+        missileAnim.state.SetAnimation(0, "hit", false);
+
+        Transform effectHit = bullet.transform.GetChild(2);
+        effectHit.gameObject.SetActive(true);
+        SkeletonAnimation effectHit1 = effectHit.GetChild(0).GetComponent<SkeletonAnimation>();
+        SkeletonAnimation effectHit2 = effectHit.GetChild(1).GetComponent<SkeletonAnimation>();
+        trackEntry = effectHit1.state.SetAnimation(0, "hit", false);
+        effectHit2.state.SetAnimation(0, "hit", false);
+
+        foreach (GameObject monsterTakeDamage in bullet.GetComponent<CanonBulletController>().monsters)
+        {
+            if (monsterTakeDamage.GetComponentInParent<MonsterController>().Health > 0)
+            {
+                monsterTakeDamage.GetComponentInParent<MonsterController>().TakeDamage(damage);
+            }
+        }
+
+        bullet.transform.GetChild(1).gameObject.SetActive(false);
+
+        yield return new WaitForSpineAnimationComplete(trackEntry);
+
+        Destroy(bullet);
     }
 
     IEnumerator SetIdleLoop(SkeletonAnimation skeletonAnimation, float delayTime)

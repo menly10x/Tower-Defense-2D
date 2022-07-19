@@ -1,34 +1,30 @@
 [
  {
    "Level": 1,
-   "Damage": 10,
+   "Damage": 16,
    "FireRate": 5,
    "FireRange": 1.5,
-   "BuyPrice": 100,
-   "SellPrice": 50
+   "Price": 60
  },
  {
    "Level": 2,
    "Damage": 20,
    "FireRate": 4,
    "FireRange": 1.5,
-   "BuyPrice": 200,
-   "SellPrice": 100
+   "Price": 90
  },
  {
    "Level": 3,
    "Damage": 30,
-   "FireRate": 3,
+   "FireRate": 7,
    "FireRange": 2,
-   "BuyPrice": 300,
-   "SellPrice": 150
+   "Price": 120
  },
  {
    "Level": 4,
    "Damage": 40,
-   "FireRate": 2,
+   "FireRate": 10,
    "FireRange": 2,
-   "BuyPrice": 400,
-   "SellPrice": 200
+   "Price": 160
  }
 ]
