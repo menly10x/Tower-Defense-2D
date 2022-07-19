@@ -74,7 +74,7 @@ public class PlayerSetting : MonoBehaviour
     void Start()
     {
         Coin = 200;
-        Health = 1;
+        Health = 15;
     }
 
     // Update is called once per frame
