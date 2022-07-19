@@ -10,7 +10,11 @@ public class MagicTowerController : MonoBehaviour
     public Transform spineLevelParent;
     SkeletonAnimation skeletonAnimation;
 
-    public GameObject magicBullet;
+    public Transform bulletParent;
+    public GameObject magicBullet1;
+    public GameObject magicBullet2;
+    public GameObject magicBullet3;
+    float bulletSpeed = 5f;
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0f;
 
@@ -25,6 +29,7 @@ public class MagicTowerController : MonoBehaviour
         {
             level = value;
             LoadDataTower();
+            SetIdle();
         }
     }
 
@@ -37,7 +42,7 @@ public class MagicTowerController : MonoBehaviour
     void Start()
     {
         Level = 1;
-        SetIdle(Level);
+        
     }
 
     // Update is called once per frame
@@ -86,7 +91,6 @@ public class MagicTowerController : MonoBehaviour
         }
         else
         {
-            countDown = 1.2f;
             StartCoroutine(SetShoot(monster));
         }
     }
@@ -122,7 +126,7 @@ public class MagicTowerController : MonoBehaviour
         }
     }
 
-    void SetIdle(int level)
+    void SetIdle()
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
@@ -131,23 +135,46 @@ public class MagicTowerController : MonoBehaviour
 
     IEnumerator SetShoot(GameObject monster)
     {
+        countDown = fireRate;
+
         Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
         skeletonAnimation = spineLevel.GetComponent<SkeletonAnimation>();
-        Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "attack", false);
+        skeletonAnimation.state.SetAnimation(0, "attack", false);
 
-        magicBullet.transform.localPosition = new Vector3(0, 0, 0);
+        GameObject bullet;
 
-        magicBullet.SetActive(true);
-        magicBullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+        switch (Level)
         {
-            magicBullet.SetActive(false);
-            if (monster.GetComponentInParent<MonsterController>().Health > 0)
-            {
-                monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
-            }
-        });
+            case 1:
+                bullet = Instantiate(magicBullet1, bulletParent);
+                break;
+            case 2:
+            case 4:
+                bullet = Instantiate(magicBullet2, bulletParent);
+                break;
+            case 3:
+                bullet = Instantiate(magicBullet3, bulletParent);
+                break;
+            default:
+                bullet = Instantiate(magicBullet1, bulletParent);
+                break;
+        }
 
-        yield return new WaitForSpineAnimationComplete(trackEntry);
+        bullet.transform.localPosition = new Vector3(0, 0, 0);
+
+        float distance = Vector2.Distance(bullet.transform.position, monster.transform.position);
+        float time = distance / bulletSpeed;
+
+        bullet.transform.DOMove(monster.transform.position, time).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(time);
+
+        Destroy(bullet);
+
+        if (monster.GetComponentInParent<MonsterController>().Health > 0)
+        {
+            monster.GetComponentInParent<MonsterController>().TakeDamage(damage);
+        }
 
         skeletonAnimation.state.SetAnimation(0, "idle", true);
     }
