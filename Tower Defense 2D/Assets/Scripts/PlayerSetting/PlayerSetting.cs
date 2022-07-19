@@ -20,6 +20,48 @@ public class PlayerSetting : MonoBehaviour
         }
     }
 
+    private int health;
+    public int Health
+    {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+            UIController.instance.txtHealth.text = health.ToString();
+            Debug.Log(health);
+            if (health == 0)
+            {
+                MonsterSpawnController.instance.StopAllCoroutines();
+                MonsterSpawnController.instance.isDoneSpawn = false;
+                UIController.instance.OpenPanelLose();
+            }
+        }
+    }
+
+    private string highScoreKey = "highScore";
+    private int highScore;
+    public int HighScore
+    {
+        get
+        {
+            if (!PlayerPrefs.HasKey(highScoreKey))
+            {
+                PlayerPrefs.SetInt(highScoreKey, 0);
+            }
+
+            highScore = PlayerPrefs.GetInt(highScoreKey);
+            return highScore;
+        }
+        set
+        {
+            highScore = value;
+            PlayerPrefs.SetInt(highScoreKey, highScore);
+        }
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -32,6 +74,7 @@ public class PlayerSetting : MonoBehaviour
     void Start()
     {
         Coin = 200;
+        Health = 15;
     }
 
     // Update is called once per frame

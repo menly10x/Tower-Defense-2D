@@ -54,6 +54,10 @@ public class MonsterController : MonoBehaviour
     void Update()
     {
         slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
+        if (PlayerSetting.instance.Health == 0)
+        {
+            transform.DOKill();
+        }
     }
 
     public void Move()
@@ -62,6 +66,7 @@ public class MonsterController : MonoBehaviour
         float timeToMove = CalculateDistance(wayPoints) / moveSpeed;
         transform.DOPath(wayPoints, timeToMove, PathType.Linear, PathMode.TopDown2D, 0, Color.red).SetEase(Ease.Linear).OnWaypointChange(MyCallBack).OnComplete(() =>
         {
+            PlayerSetting.instance.Health = Math.Max(0, PlayerSetting.instance.Health - 1);
             Destroy(gameObject);
         });
     }

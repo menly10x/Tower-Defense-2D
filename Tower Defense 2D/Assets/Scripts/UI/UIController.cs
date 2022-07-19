@@ -211,4 +211,35 @@ public class UIController : MonoBehaviour
         Destroy(currentTower);
         TowerManager.instance.towerPlacementParent.GetChild(towerPlacementIndex).gameObject.SetActive(true);
     }
+
+    [Header("Panel Lose")]
+    public GameObject pnlLose;
+    public Transform background;
+    public Transform btnHome;
+    public Transform btnReplay;
+    public Text txtHighScore;
+
+    public void OpenPanelLose()
+    {
+        StartCoroutine(DelayOpenPanelLose());
+    }
+
+    IEnumerator DelayOpenPanelLose()
+    {
+        txtHighScore.text = "Score: " + MonsterSpawnController.instance.WaveSpawn + "\nHigh score: " + PlayerSetting.instance.HighScore;
+        btnHome.localScale = Vector3.zero;
+        btnReplay.localScale = Vector3.zero; 
+        background.localScale = Vector3.zero;
+        pnlLose.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+        pnlLose.SetActive(true);
+
+        pnlLose.GetComponent<Image>().DOFade(0.5f, 0.5f);
+        background.DOScale(1, 0.5f);
+
+        yield return new WaitForSeconds(1f);
+
+        btnReplay.DOScale(1, 0.5f).SetEase(Ease.OutBack);
+        btnHome.DOScale(1, 0.5f).SetEase(Ease.OutBack);
+    }
+
 }
