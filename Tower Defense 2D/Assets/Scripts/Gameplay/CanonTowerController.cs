@@ -247,12 +247,15 @@ public class CanonTowerController : MonoBehaviour
             GameObject bullet = Instantiate(bomb, bulletParent);
             bullet.transform.localPosition = new Vector3(0, 0, 0);
 
+            AudioController.instance.PlaySound("canonShoot");
             bullet.transform.DOJump(monsterPosition, 1f, 1, 1f).SetEase(Ease.Linear);
 
             yield return new WaitForSeconds(1f);
 
             bullet.transform.GetChild(0).gameObject.SetActive(false);
             bullet.transform.GetChild(1).gameObject.SetActive(false);
+
+            AudioController.instance.PlaySound("canonHit");
 
             Transform effectHit = bullet.transform.GetChild(2);
             effectHit.gameObject.SetActive(true);
@@ -324,6 +327,7 @@ public class CanonTowerController : MonoBehaviour
         float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
 
+        AudioController.instance.PlaySound("missileShoot");
         bullet.transform.DOMove(positionUp, 1f).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(1f);
@@ -336,6 +340,8 @@ public class CanonTowerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         bullet.transform.GetChild(3).gameObject.SetActive(false);
+
+        AudioController.instance.PlaySound("missileHit");
 
         missileAnim.state.SetAnimation(0, "hit", false);
 
@@ -410,6 +416,7 @@ public class CanonTowerController : MonoBehaviour
         float angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
 
+        AudioController.instance.PlaySound("missileShoot");
         bullet.transform.DOMove(positionUp, 1f).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(1f);
@@ -422,6 +429,8 @@ public class CanonTowerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         bullet.transform.GetChild(3).gameObject.SetActive(false);
+
+        AudioController.instance.PlaySound("missileHit");
 
         missileAnim.state.SetAnimation(0, "hit", false);
 
