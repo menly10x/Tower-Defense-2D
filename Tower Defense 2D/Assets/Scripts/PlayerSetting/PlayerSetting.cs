@@ -36,6 +36,12 @@ public class PlayerSetting : MonoBehaviour
             {
                 MonsterSpawnController.instance.StopAllCoroutines();
                 MonsterSpawnController.instance.isDoneSpawn = false;
+
+                if (MonsterSpawnController.instance.WaveSpawn > HighScore)
+                {
+                    HighScore = MonsterSpawnController.instance.WaveSpawn;
+                }
+
                 UIController.instance.OpenPanelLose();
             }
         }
@@ -68,18 +74,5 @@ public class PlayerSetting : MonoBehaviour
         {
             instance = this;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Coin = 200;
-        Health = 15;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

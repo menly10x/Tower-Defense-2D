@@ -1,21 +1,21 @@
 [
  {
    "Level": 1,
-   "Damage": 16,
+   "Damage": 25,
    "FireRate": 5,
    "FireRange": 1.5,
    "Price": 60
  },
  {
    "Level": 2,
-   "Damage": 20,
+   "Damage": 30,
    "FireRate": 4,
    "FireRange": 1.5,
    "Price": 90
  },
  {
    "Level": 3,
-   "Damage": 30,
+   "Damage": 35,
    "FireRate": 7,
    "FireRange": 2,
    "Price": 120

@@ -12,6 +12,8 @@ public class LightningTowerController : MonoBehaviour
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0f;
 
+    public Transform attackRange;
+
     private int level;
     public int Level
     {
@@ -24,6 +26,8 @@ public class LightningTowerController : MonoBehaviour
             level = value;
             LoadDataTower();
             SetIdle();
+
+            attackRange.localScale = new Vector2(fireRange, fireRange);
         }
     }
 

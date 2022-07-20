@@ -8,6 +8,7 @@ public class GameplayController : MonoBehaviour
 {
     public static GameplayController instance;
 
+    public SpriteRenderer background;
     int fingerID = -1;
     Vector3 touchStart;
     public SpriteRenderer map;
@@ -33,7 +34,11 @@ public class GameplayController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Camera.main.orthographicSize = background.bounds.size.x * Screen.height / Screen.width * 0.5f;
         GetMapSize();
+
+        PlayerSetting.instance.Coin = 250;
+        PlayerSetting.instance.Health = 15;
     }
 
     // Update is called once per frame

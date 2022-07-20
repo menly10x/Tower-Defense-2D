@@ -30,6 +30,8 @@ public class CanonTowerController : MonoBehaviour
     public Transform bulletParentLevel4_3;
     public Transform bulletParentLevel4_4;
 
+    public Transform attackRange;
+
     private int level;
     public int Level
     {
@@ -42,6 +44,8 @@ public class CanonTowerController : MonoBehaviour
             level = value;
             LoadDataTower();
             SetIdle();
+
+            attackRange.localScale = new Vector2(fireRange, fireRange);
         }
     }
 
@@ -123,7 +127,7 @@ public class CanonTowerController : MonoBehaviour
         else
         {
             
-            StartCoroutine(SetShoot(monster));
+            StartCoroutine(SetShoot(monster.transform.position));
         }
     }
 
@@ -182,7 +186,7 @@ public class CanonTowerController : MonoBehaviour
         }
     }
 
-    IEnumerator SetShoot(GameObject monster)
+    IEnumerator SetShoot(Vector3 monsterPosition)
     {
         countDown = fireRate;
         Transform spineLevel = spineLevelParent.GetChild(Level - 1).GetChild(0);
@@ -192,7 +196,7 @@ public class CanonTowerController : MonoBehaviour
         {
             StopCoroutine(idleAnimCoroutine);
 
-            Vector3 direct = monster.transform.position - transform.position;
+            Vector3 direct = monsterPosition - transform.position;
             float angle = Mathf.Abs(90 - (Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg));
 
             float minAngle = Mathf.Abs(angles[0] - angle);
@@ -243,7 +247,7 @@ public class CanonTowerController : MonoBehaviour
             GameObject bullet = Instantiate(bomb, bulletParent);
             bullet.transform.localPosition = new Vector3(0, 0, 0);
 
-            bullet.transform.DOJump(monster.transform.position, 1f, 1, 1f).SetEase(Ease.Linear);
+            bullet.transform.DOJump(monsterPosition, 1f, 1, 1f).SetEase(Ease.Linear);
 
             yield return new WaitForSeconds(1f);
 
@@ -273,19 +277,19 @@ public class CanonTowerController : MonoBehaviour
         }
         else if (level < 4)
         {
-            StartCoroutine(DelayShootLv3(0, monster));
-            StartCoroutine(DelayShootLv3(1, monster));
+            StartCoroutine(DelayShootLv3(0, monsterPosition));
+            StartCoroutine(DelayShootLv3(1, monsterPosition));
         }
         else
         {
-            StartCoroutine(DelayShootLv4(0, monster));
-            StartCoroutine(DelayShootLv4(1, monster));
-            StartCoroutine(DelayShootLv4(2, monster));
-            StartCoroutine(DelayShootLv4(3, monster));
+            StartCoroutine(DelayShootLv4(0, monsterPosition));
+            StartCoroutine(DelayShootLv4(1, monsterPosition));
+            StartCoroutine(DelayShootLv4(2, monsterPosition));
+            StartCoroutine(DelayShootLv4(3, monsterPosition));
         }
     }
 
-    IEnumerator DelayShootLv3(int i, GameObject monster)
+    IEnumerator DelayShootLv3(int i, Vector3 monsterPosition)
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1);
         foreach (Transform spine in spineLevel)
@@ -324,10 +328,10 @@ public class CanonTowerController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        direct = monster.transform.position - positionUp;
+        direct = monsterPosition - positionUp;
         angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
-        bullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear);
+        bullet.transform.DOMove(monsterPosition, 0.5f).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -357,7 +361,7 @@ public class CanonTowerController : MonoBehaviour
         Destroy(bullet);
     }
 
-    IEnumerator DelayShootLv4(int i, GameObject monster)
+    IEnumerator DelayShootLv4(int i, Vector3 monsterPosition)
     {
         Transform spineLevel = spineLevelParent.GetChild(level - 1);
         foreach (Transform spine in spineLevel)
@@ -410,10 +414,10 @@ public class CanonTowerController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        direct = monster.transform.position - positionUp;
+        direct = monsterPosition - positionUp;
         angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
-        bullet.transform.DOMove(monster.transform.position, 0.5f).SetEase(Ease.Linear);
+        bullet.transform.DOMove(monsterPosition, 0.5f).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(0.5f);
 
