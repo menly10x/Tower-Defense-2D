@@ -27,7 +27,7 @@ public class GameplayController : MonoBehaviour
         }
         Camera.main.orthographicSize = background.bounds.size.x * Screen.height / Screen.width * 0.5f;
 #if !UNITY_EDITOR
-     fingerID = 0; 
+        fingerID = 0; 
 #endif
     }
 
@@ -43,90 +43,93 @@ public class GameplayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject(fingerID))
+        if (EventSystem.current.IsPointerOverGameObject(fingerID))
         {
-            if (Input.GetMouseButtonDown(0))
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            isDragging = false;
+            isMultiTouch = false;
+            touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        if (Input.touchCount == 2)
+        {
+            if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
             {
-                isDragging = false;
-                isMultiTouch = false;
-                touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                isMultiTouch = true;
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+                float prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+                float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+
+                float difference = currentMagnitude - prevMagnitude;
+
+                Zoom(difference * 0.01f);
             }
-
-            if (Input.touchCount == 2)
+        }
+        else if (Input.GetMouseButton(0) && !isMultiTouch)
+        {
+            if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
             {
-                if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
+                Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                if (direction.x > 0.02f || direction.x < -0.02f || direction.y > 0.02f || direction.y < -0.02f)
                 {
-                    isMultiTouch = true;
-                    Touch touchZero = Input.GetTouch(0);
-                    Touch touchOne = Input.GetTouch(1);
-
-                    Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-                    Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-
-                    float prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-                    float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-
-                    float difference = currentMagnitude - prevMagnitude;
-
-                    Zoom(difference * 0.01f);
+                    isDragging = true;
                 }
-            }
-            else if (Input.GetMouseButton(0) && !isMultiTouch)
-            {
-                if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
-                {
-                    Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                    if (direction.x > 0.02f || direction.x < -0.02f || direction.y > 0.02f || direction.y < -0.02f)
+                Camera.main.transform.position = ClampCamera(Camera.main.transform.position + direction);
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (!isDragging && !isMultiTouch)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerPlacementLayer);
+
+                if (hit.collider != null)
+                {
+                    if (hit.collider.tag.Equals("TowerPlacement"))
                     {
-                        isDragging = true;
+                        UIController.instance.OpenBtnBuyTower(hit.collider.transform, hit.collider.transform.parent.GetSiblingIndex());
                     }
-
-                    Camera.main.transform.position = ClampCamera(Camera.main.transform.position + direction);
                 }
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                if (!isDragging && !isMultiTouch)
+                else
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerPlacementLayer);
+                    UIController.instance.CloseBtnBuyTower();
 
+                    hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerLayer);
                     if (hit.collider != null)
                     {
-                        if (hit.collider.tag.Equals("TowerPlacement"))
+                        if (hit.collider.tag.Equals("Tower"))
                         {
-                            UIController.instance.OpenBtnBuyTower(hit.collider.transform, hit.collider.transform.parent.GetSiblingIndex());
+                            UIController.instance.OpenBtnUpgradeAndSellTower(hit.collider.transform, hit.collider.gameObject.transform.parent.gameObject);
                         }
                     }
                     else
                     {
-                        UIController.instance.CloseBtnBuyTower();
-
-                        hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, towerLayer);
-                        if (hit.collider != null)
-                        {
-                            if (hit.collider.tag.Equals("Tower"))
-                            {
-                                UIController.instance.OpenBtnUpgradeAndSellTower(hit.collider.transform, hit.collider.gameObject.transform.parent.gameObject);
-                            }
-                        }
-                        else
-                        {
-                            UIController.instance.CloseBtnUpgradeAndSellTower();
-                        }
+                        UIController.instance.CloseBtnUpgradeAndSellTower();
                     }
-
-                    
                 }
-            }
 
-            if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
-            {
-                Zoom(Input.GetAxis("Mouse ScrollWheel"));
+
             }
         }
+
+        if (!UIController.instance.btnBuyTower.activeSelf && !UIController.instance.btnUpgradeAndSellTower.activeSelf)
+        {
+            Zoom(Input.GetAxis("Mouse ScrollWheel"));
+        }
+
     }
 
     void Zoom(float increment)
@@ -162,5 +165,5 @@ public class GameplayController : MonoBehaviour
 
         return new Vector3(newX, newy, targetPosition.z);
     }
-    
+
 }

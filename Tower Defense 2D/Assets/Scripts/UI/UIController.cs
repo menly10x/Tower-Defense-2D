@@ -40,7 +40,7 @@ public class UIController : MonoBehaviour
 
         btnBuyTower.transform.DOKill();
         btnBuyTower.SetActive(false);
-        btnBuyTower.transform.position = targetPosition.position;
+        btnBuyTower.transform.position = new Vector3(targetPosition.position.x, targetPosition.position.y, btnBuyTower.transform.position.z);
         btnBuyTower.transform.localScale = new Vector3(0, 0, 0);
         btnBuyTower.SetActive(true);
         btnBuyTower.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
@@ -121,11 +121,13 @@ public class UIController : MonoBehaviour
         SetPrice(tower);
         btnUpgradeAndSellTower.transform.DOKill();
         btnUpgradeAndSellTower.SetActive(false);
-        btnUpgradeAndSellTower.transform.position = targetPosition.position;
+        btnUpgradeAndSellTower.transform.position = new Vector3(targetPosition.position.x, targetPosition.position.y, btnUpgradeAndSellTower.transform.position.z);
         btnUpgradeAndSellTower.transform.localScale = new Vector3(0, 0, 0);
         btnUpgradeAndSellTower.SetActive(true);
         btnUpgradeAndSellTower.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         currentTower = tower;
+
+        towerPlacementIndex = tower.GetComponent<TowerController>().towerPlacementIndex;
 
         OpenAttackRange();
     }
@@ -476,6 +478,10 @@ public class UIController : MonoBehaviour
                 txtGameSpeed.text = "x3";
                 break;
             case 3:
+                Time.timeScale = 20;
+                txtGameSpeed.text = "x20";
+                break;
+            case 20:
                 Time.timeScale = 1;
                 txtGameSpeed.text = "x1";
                 break;
