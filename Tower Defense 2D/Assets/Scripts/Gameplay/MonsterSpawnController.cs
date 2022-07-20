@@ -63,6 +63,7 @@ public class MonsterSpawnController : MonoBehaviour
 
         if (countDown <= 0)
         {
+            AudioController.instance.PlaySound("waveStart");
             isDoneSpawn = false;
             StartCoroutine(SpawnWave());
             countDown = timeBetweenWave;

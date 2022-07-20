@@ -33,18 +33,6 @@ public class UIController : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void OpenBtnBuyTower(Transform targetPosition, int placementIndex)
     {
         CheckBtnBuy();
@@ -102,6 +90,7 @@ public class UIController : MonoBehaviour
 
     public void ButtonBuyTower(int index)
     {
+        AudioController.instance.PlaySound("buyTower");
         CloseBtnBuyTower();
         switch (index)
         {
@@ -204,6 +193,7 @@ public class UIController : MonoBehaviour
 
     public void ButtonUpgradeTower()
     {
+        AudioController.instance.PlaySound("upgradeTower");
         PlayerSetting.instance.Coin -= priceToUpgrade;
         CloseBtnUpgradeAndSellTower();
         StartCoroutine(TowerManager.instance.UpgradeTower(currentTower));
@@ -211,6 +201,7 @@ public class UIController : MonoBehaviour
 
     public void ButtonSellTower()
     {
+        AudioController.instance.PlaySound("sellTower");
         PlayerSetting.instance.Coin += priceToSell;
         CloseBtnUpgradeAndSellTower();
         Destroy(currentTower);
@@ -312,6 +303,7 @@ public class UIController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        AudioController.instance.PlaySound("ingame");
         GameObject gameplay = Instantiate(gameplayPrefab, gameplayParent);
         gameplay.transform.position = Vector3.zero;
         pnlHome.SetActive(false);
@@ -350,6 +342,7 @@ public class UIController : MonoBehaviour
         pnlIngame.SetActive(false);
         pnlLose.SetActive(false);
         pnlPause.SetActive(false);
+        AudioController.instance.PlaySound("mainMenu");
 
         yield return new WaitForSeconds(0.5f);
 
@@ -400,6 +393,10 @@ public class UIController : MonoBehaviour
 
     [Header("Panel Setting")]
     public GameObject pnlSetting;
+    public GameObject soundOn;
+    public GameObject soundOff;
+    public GameObject vibrateOn;
+    public GameObject vibrateOff;
 
     public void ButtonOpenSetting()
     {
@@ -414,6 +411,30 @@ public class UIController : MonoBehaviour
         {
             pnlSetting.SetActive(false);
         });
+    }
+
+    public void ButtonSound()
+    {
+        if (AudioController.instance.Sound == 1)
+        {
+            AudioController.instance.Sound = 0;
+        }
+        else
+        {
+            AudioController.instance.Sound = 1;
+        }
+    }
+
+    public void ButtonVibrate()
+    {
+        if (AudioController.instance.Vibrate == 1)
+        {
+            AudioController.instance.Vibrate = 0;
+        }
+        else
+        {
+            AudioController.instance.Vibrate = 1;
+        }
     }
 
     [Header("Panel Pause")]

@@ -31,7 +31,6 @@ public class PlayerSetting : MonoBehaviour
         {
             health = value;
             UIController.instance.txtHealth.text = health.ToString();
-            Debug.Log(health);
             if (health == 0)
             {
                 MonsterSpawnController.instance.StopAllCoroutines();
@@ -41,7 +40,7 @@ public class PlayerSetting : MonoBehaviour
                 {
                     HighScore = MonsterSpawnController.instance.WaveSpawn;
                 }
-
+                AudioController.instance.PlaySound("lose");
                 UIController.instance.OpenPanelLose();
             }
         }

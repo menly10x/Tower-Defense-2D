@@ -186,10 +186,12 @@ public class ArcherTowerController : MonoBehaviour
 
         float distance = Vector2.Distance(bullet.transform.position, monster.transform.position);
         float time = distance / arrowSpeed;
-
+        AudioController.instance.PlaySound("archerShoot");
         bullet.transform.DOMove(monster.transform.position, time).SetEase(Ease.Linear);
 
         yield return new WaitForSeconds(time);
+
+        AudioController.instance.PlaySound("archerHit");
 
         Destroy(bullet);
 

@@ -149,6 +149,8 @@ public class LightningTowerController : MonoBehaviour
             trackEntry = spine.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "attack", false);
         }
 
+        AudioController.instance.PlaySound("lightningShoot");
+
         yield return new WaitForSeconds(0.8f);
 
         foreach (GameObject monster in monsters)

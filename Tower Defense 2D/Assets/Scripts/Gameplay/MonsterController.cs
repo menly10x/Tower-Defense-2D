@@ -79,6 +79,7 @@ public class MonsterController : MonoBehaviour
         float timeToMove = CalculateDistance(wayPoints) / moveSpeed;
         transform.DOPath(wayPoints, timeToMove, PathType.Linear, PathMode.TopDown2D, 0, Color.red).SetEase(Ease.Linear).OnWaypointChange(MyCallBack).OnComplete(() =>
         {
+            AudioController.instance.PlayVibrate();
             PlayerSetting.instance.Health = Math.Max(0, PlayerSetting.instance.Health - 1);
             Destroy(gameObject);
         });
@@ -118,6 +119,7 @@ public class MonsterController : MonoBehaviour
     {
         transform.DOKill();
 
+        AudioController.instance.PlaySound("gold");
         PlayerSetting.instance.Coin += priceDeath;
 
         wood.SetActive(true);

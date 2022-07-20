@@ -47,7 +47,7 @@ public class AnimatedButton : UIBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private void OnClickAction()
     {
-        //AudioController.instance.PlaySound("button");
+        AudioController.instance.PlaySound("button");
         m_OnClick.Invoke();
     }
 
