@@ -19,6 +19,8 @@ public class ArcherTowerController : MonoBehaviour
     public Transform arrowParentLv3;
     public Transform arrowParentLv4;
 
+    public Transform attackRange;
+
     float arrowSpeed = 5f;
 
     private int level;
@@ -33,6 +35,8 @@ public class ArcherTowerController : MonoBehaviour
             level = value;
             LoadDataTower();
             SetIdle();
+
+            attackRange.localScale = new Vector2(fireRange, fireRange);
         }
     }
 

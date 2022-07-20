@@ -20,7 +20,7 @@ public class MonsterSpawnController : MonoBehaviour
     public GameObject[] leader;
     public GameObject[] normal;
 
-    int totalTurnSpawn = 10;
+    int totalTurnSpawn = 5;
     float timeBetweenWave = 5f;
     float countDown = 5f;
     public bool isDoneSpawn = true;
@@ -100,7 +100,7 @@ public class MonsterSpawnController : MonoBehaviour
             yield return new WaitForSeconds(5f);
         }
 
-        totalTurnSpawn += 2;
+        totalTurnSpawn++;
         WaveSpawn++;
         isDoneSpawn = true;
     }
@@ -109,33 +109,40 @@ public class MonsterSpawnController : MonoBehaviour
     {
         monsters = new List<GameObject>();
         paths = new List<Transform>();
-        if (WaveSpawn <= 10)
+        if (WaveSpawn <= 5)
         {
             AddLeaderMonster(1);
             AddNormalMonster(3);
             AddWay1Path();
         }
+        else if (WaveSpawn > 5 && WaveSpawn <= 10)
+        {
+            AddLeaderMonster(2);
+            AddNormalMonster(3);
+            AddWay1Path();
+            AddWay2Path();
+        }
         else if (WaveSpawn > 10 && WaveSpawn <= 20)
         {
-            AddLeaderMonster(1);
-            AddNormalMonster(10);
+            AddLeaderMonster(3);
+            AddNormalMonster(7);
             AddWay1Path();
             AddWay2Path();
         }
         else if (WaveSpawn > 20 && WaveSpawn <= 30)
         {
-            AddBossMonster(1);
-            AddLeaderMonster(1);
-            AddNormalMonster(20);
+            AddBossMonster(2);
+            AddLeaderMonster(5);
+            AddNormalMonster(15);
             AddWay1Path();
             AddWay2Path();
             AddWay3Path();
         }
         else if (WaveSpawn > 30)
         {
-            AddBossMonster(2);
-            AddLeaderMonster(2);
-            AddNormalMonster(40);
+            AddBossMonster(5);
+            AddLeaderMonster(10);
+            AddNormalMonster(30);
             AddWay1Path();
             AddWay2Path();
             AddWay3Path();

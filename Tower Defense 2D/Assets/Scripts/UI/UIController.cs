@@ -125,6 +125,8 @@ public class UIController : MonoBehaviour
 
     public void OpenBtnUpgradeAndSellTower(Transform targetPosition, GameObject tower)
     {
+        CloseAttackRange();
+
         SetPrice(tower);
         btnUpgradeAndSellTower.transform.DOKill();
         btnUpgradeAndSellTower.SetActive(false);
@@ -133,6 +135,8 @@ public class UIController : MonoBehaviour
         btnUpgradeAndSellTower.SetActive(true);
         btnUpgradeAndSellTower.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         currentTower = tower;
+
+        OpenAttackRange();
     }
 
     void SetPrice(GameObject tower)
@@ -193,6 +197,7 @@ public class UIController : MonoBehaviour
 
     public void CloseBtnUpgradeAndSellTower()
     {
+        CloseAttackRange();
         btnUpgradeAndSellTower.transform.DOKill();
         btnUpgradeAndSellTower.SetActive(false);
     }
@@ -210,6 +215,49 @@ public class UIController : MonoBehaviour
         CloseBtnUpgradeAndSellTower();
         Destroy(currentTower);
         TowerManager.instance.towerPlacementParent.GetChild(towerPlacementIndex).gameObject.SetActive(true);
+    }
+
+    void OpenAttackRange()
+    {
+        if (currentTower.GetComponent<ArcherTowerController>() != null)
+        {
+            currentTower.GetComponent<ArcherTowerController>().attackRange.GetChild(0).gameObject.SetActive(true);
+        }
+        else if (currentTower.GetComponent<CanonTowerController>() != null)
+        {
+            currentTower.GetComponent<CanonTowerController>().attackRange.GetChild(0).gameObject.SetActive(true);
+        }
+        else if (currentTower.GetComponent<MagicTowerController>() != null)
+        {
+            currentTower.GetComponent<MagicTowerController>().attackRange.GetChild(0).gameObject.SetActive(true);
+        }
+        else if (currentTower.GetComponent<LightningTowerController>() != null)
+        {
+            currentTower.GetComponent<LightningTowerController>().attackRange.GetChild(0).gameObject.SetActive(true);
+        }
+    }
+
+    void CloseAttackRange()
+    {
+        if (currentTower != null)
+        {
+            if (currentTower.GetComponent<ArcherTowerController>() != null)
+            {
+                currentTower.GetComponent<ArcherTowerController>().attackRange.GetChild(0).gameObject.SetActive(false);
+            }
+            else if (currentTower.GetComponent<CanonTowerController>() != null)
+            {
+                currentTower.GetComponent<CanonTowerController>().attackRange.GetChild(0).gameObject.SetActive(false);
+            }
+            else if (currentTower.GetComponent<MagicTowerController>() != null)
+            {
+                currentTower.GetComponent<MagicTowerController>().attackRange.GetChild(0).gameObject.SetActive(false);
+            }
+            else if (currentTower.GetComponent<LightningTowerController>() != null)
+            {
+                currentTower.GetComponent<LightningTowerController>().attackRange.GetChild(0).gameObject.SetActive(false);
+            }
+        }
     }
 
     [Header("Panel Lose")]
@@ -234,7 +282,7 @@ public class UIController : MonoBehaviour
         pnlLose.SetActive(true);
 
         pnlLose.GetComponent<Image>().DOFade(0.5f, 0.5f);
-        background.DOScale(1, 0.5f);
+        background.DOScale(1, 0.5f).SetEase(Ease.OutBack);
 
         yield return new WaitForSeconds(1f);
 
@@ -242,4 +290,103 @@ public class UIController : MonoBehaviour
         btnHome.DOScale(1, 0.5f).SetEase(Ease.OutBack);
     }
 
+    [Header("Panel Home")]
+    public GameObject pnlHome;
+    public GameObject pnlIngame;
+    public GameObject pnlLoading;
+    public GameObject gameplayPrefab;
+    public Transform gameplayParent;
+    
+    public void ButtonPlay()
+    {
+        StartCoroutine(DelayPlay());
+    }
+
+    IEnumerator DelayPlay()
+    {
+        pnlLoading.SetActive(true);
+        float defaultX1 = pnlLoading.transform.GetChild(0).localPosition.x;
+        float defaultX2 = pnlLoading.transform.GetChild(1).localPosition.x;
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        GameObject gameplay = Instantiate(gameplayPrefab, gameplayParent);
+        gameplay.transform.position = Vector3.zero;
+        pnlHome.SetActive(false);
+        pnlIngame.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(defaultX1, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(defaultX2, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        pnlLoading.SetActive(false);
+    }
+
+    public void ButtonHome()
+    {
+        StartCoroutine(DelayHome());
+    }
+
+    IEnumerator DelayHome()
+    {
+        pnlLoading.SetActive(true);
+        float defaultX1 = pnlLoading.transform.GetChild(0).localPosition.x;
+        float defaultX2 = pnlLoading.transform.GetChild(1).localPosition.x;
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        Destroy(gameplayParent.GetChild(0).gameObject);
+        pnlHome.SetActive(true);
+        pnlIngame.SetActive(false);
+        pnlLose.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(defaultX1, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(defaultX2, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        pnlLoading.SetActive(false);
+    }
+
+    public void ButtonRestart()
+    {
+        StartCoroutine(DelayRestart());
+    }
+
+    IEnumerator DelayRestart()
+    {
+        pnlLoading.SetActive(true);
+        float defaultX1 = pnlLoading.transform.GetChild(0).localPosition.x;
+        float defaultX2 = pnlLoading.transform.GetChild(1).localPosition.x;
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(0, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        pnlLose.SetActive(false);
+
+        Destroy(gameplayParent.GetChild(0).gameObject);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Instantiate(gameplayPrefab, gameplayParent);
+
+        yield return new WaitForSeconds(0.5f);
+
+        pnlLoading.transform.GetChild(0).DOLocalMoveX(defaultX1, 0.5f).SetEase(Ease.Linear);
+        pnlLoading.transform.GetChild(1).DOLocalMoveX(defaultX2, 0.5f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(1f);
+
+        pnlLoading.SetActive(false);
+    }
 }

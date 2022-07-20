@@ -12,10 +12,16 @@ public class MonsterController : MonoBehaviour
     SkeletonAnimation skeletonAnimation;
     public Vector3[] wayPoints;
 
-    public Slider slider;
+    public SpriteRenderer healthGreen;
+    public SpriteRenderer healthRed;
     public Vector3 offset;
 
+    public GameObject wood;
+    public float priceDeath;
+
     Color defaultColor;
+
+    public float armor;
 
     private float health;
     public float Health
@@ -27,10 +33,13 @@ public class MonsterController : MonoBehaviour
         set
         {
             health = value;
-            slider.maxValue = 100;
-            slider.value = health;
+
+            healthGreen.size = new Vector2((health * 2.41f) / 100, 0.43f);
+            healthRed.size = new Vector2(2.41f - healthGreen.size.x, 0.43f);
+
             if (health <= 0)
             {
+                
                 StartCoroutine(SetDeath());
             }
         }
@@ -38,7 +47,6 @@ public class MonsterController : MonoBehaviour
 
     private void Awake()
     {
-        slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
         skeletonAnimation = transform.GetChild(0).GetChild(0).GetComponent<SkeletonAnimation>();
     }
 
@@ -48,15 +56,20 @@ public class MonsterController : MonoBehaviour
         Health = 100;
         Move();
         defaultColor = skeletonAnimation.skeleton.GetColor();
+
+        if (MonsterSpawnController.instance.WaveSpawn != 1)
+        {
+            armor += 0.05f * MonsterSpawnController.instance.WaveSpawn;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        slider.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
         if (PlayerSetting.instance.Health == 0)
         {
             transform.DOKill();
+            skeletonAnimation.state.SetAnimation(0, "idle", true);
         }
     }
 
@@ -105,11 +118,18 @@ public class MonsterController : MonoBehaviour
     {
         transform.DOKill();
 
+        PlayerSetting.instance.Coin += priceDeath;
+
+        wood.SetActive(true);
+        wood.GetComponent<SkeletonAnimation>().state.SetAnimation(0, "play1", false);
+
         Spine.TrackEntry trackEntry = skeletonAnimation.state.SetAnimation(0, "death", false);
 
         yield return new WaitForSpineAnimationComplete(trackEntry);
 
         skeletonAnimation.state.SetAnimation(0, "death_idle", true);
+
+        healthGreen.gameObject.transform.parent.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -122,7 +142,7 @@ public class MonsterController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        Health = Math.Max(0, Health - damage);
+        Health = Math.Max(0, Health - (damage - (armor * damage / 100)));
         skeletonAnimation.skeleton.SetColor(Color.red);
         Invoke("SetDefaultColor", 0.1f);
     }
