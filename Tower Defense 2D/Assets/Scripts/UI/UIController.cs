@@ -276,7 +276,7 @@ public class UIController : MonoBehaviour
     {
         txtHighScore.text = "Score: " + MonsterSpawnController.instance.WaveSpawn + "\nHigh score: " + PlayerSetting.instance.HighScore;
         btnHome.localScale = Vector3.zero;
-        btnReplay.localScale = Vector3.zero; 
+        btnReplay.localScale = Vector3.zero;
         background.localScale = Vector3.zero;
         pnlLose.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         pnlLose.SetActive(true);
@@ -296,7 +296,7 @@ public class UIController : MonoBehaviour
     public GameObject pnlLoading;
     public GameObject gameplayPrefab;
     public Transform gameplayParent;
-    
+
     public void ButtonPlay()
     {
         StartCoroutine(DelayPlay());
@@ -334,6 +334,9 @@ public class UIController : MonoBehaviour
 
     IEnumerator DelayHome()
     {
+        Time.timeScale = 1;
+        txtGameSpeed.text = "x1";
+
         pnlLoading.SetActive(true);
         float defaultX1 = pnlLoading.transform.GetChild(0).localPosition.x;
         float defaultX2 = pnlLoading.transform.GetChild(1).localPosition.x;
@@ -346,6 +349,7 @@ public class UIController : MonoBehaviour
         pnlHome.SetActive(true);
         pnlIngame.SetActive(false);
         pnlLose.SetActive(false);
+        pnlPause.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -364,6 +368,9 @@ public class UIController : MonoBehaviour
 
     IEnumerator DelayRestart()
     {
+        Time.timeScale = 1;
+        txtGameSpeed.text = "x1";
+
         pnlLoading.SetActive(true);
         float defaultX1 = pnlLoading.transform.GetChild(0).localPosition.x;
         float defaultX2 = pnlLoading.transform.GetChild(1).localPosition.x;
@@ -372,6 +379,7 @@ public class UIController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        pnlPause.SetActive(false);
         pnlLose.SetActive(false);
 
         Destroy(gameplayParent.GetChild(0).gameObject);
@@ -388,5 +396,70 @@ public class UIController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         pnlLoading.SetActive(false);
+    }
+
+    [Header("Panel Setting")]
+    public GameObject pnlSetting;
+
+    public void ButtonOpenSetting()
+    {
+        pnlSetting.transform.GetChild(0).localScale = Vector3.zero;
+        pnlSetting.SetActive(true);
+        pnlSetting.transform.GetChild(0).DOScale(1, 0.5f).SetEase(Ease.OutBack);
+    }
+
+    public void ButtonCloseSetting()
+    {
+        pnlSetting.transform.GetChild(0).DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            pnlSetting.SetActive(false);
+        });
+    }
+
+    [Header("Panel Pause")]
+    public GameObject pnlPause;
+
+    public void OpenPanelPause()
+    {
+        Time.timeScale = 0;
+        pnlPause.transform.GetChild(0).localScale = Vector3.zero;
+        pnlPause.SetActive(true);
+        pnlPause.transform.GetChild(0).DOScale(1, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
+    }
+
+    public void ButtonContinue()
+    {
+        pnlPause.transform.GetChild(0).DOScale(0, 0.5f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() =>
+        {
+            pnlPause.SetActive(false);
+            Time.timeScale = 1;
+            txtGameSpeed.text = "x1";
+        });
+    }
+
+    [Header("Panel Ingame")]
+    public Text txtGameSpeed;
+
+    public void ButtonChangeGameSpeed()
+    {
+        switch (Time.timeScale)
+        {
+            case 1:
+                Time.timeScale = 2;
+                txtGameSpeed.text = "x2";
+                break;
+            case 2:
+                Time.timeScale = 3;
+                txtGameSpeed.text = "x3";
+                break;
+            case 3:
+                Time.timeScale = 1;
+                txtGameSpeed.text = "x1";
+                break;
+            default:
+                Time.timeScale = 1;
+                txtGameSpeed.text = "x1";
+                break;
+        }
     }
 }
