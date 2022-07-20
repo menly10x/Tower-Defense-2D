@@ -14,7 +14,7 @@ public class MagicTowerController : MonoBehaviour
     public GameObject magicBullet1;
     public GameObject magicBullet2;
     public GameObject magicBullet3;
-    float bulletSpeed = 5f;
+    float bulletSpeed = 2f;
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0f;
 
