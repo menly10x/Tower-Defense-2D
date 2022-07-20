@@ -178,7 +178,7 @@ public class AudioController : MonoBehaviour
     {
         if (Vibrate != 0)
         {
-            Vibrator.Vibrate(Vibration.LONG);
+            Vibrator.Vibrate(500);
         }
     }
 

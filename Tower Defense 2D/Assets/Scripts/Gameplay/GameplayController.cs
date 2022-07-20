@@ -25,7 +25,7 @@ public class GameplayController : MonoBehaviour
         {
             instance = this;
         }
-
+        Camera.main.orthographicSize = background.bounds.size.x * Screen.height / Screen.width * 0.5f;
 #if !UNITY_EDITOR
      fingerID = 0; 
 #endif
@@ -34,7 +34,6 @@ public class GameplayController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Camera.main.orthographicSize = background.bounds.size.x * Screen.height / Screen.width * 0.5f;
         GetMapSize();
 
         PlayerSetting.instance.Coin = 250;

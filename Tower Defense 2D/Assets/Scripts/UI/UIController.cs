@@ -35,6 +35,7 @@ public class UIController : MonoBehaviour
 
     public void OpenBtnBuyTower(Transform targetPosition, int placementIndex)
     {
+        CloseBtnUpgradeAndSellTower();
         CheckBtnBuy();
 
         btnBuyTower.transform.DOKill();
@@ -114,6 +115,7 @@ public class UIController : MonoBehaviour
 
     public void OpenBtnUpgradeAndSellTower(Transform targetPosition, GameObject tower)
     {
+        CloseBtnBuyTower();
         CloseAttackRange();
 
         SetPrice(tower);
