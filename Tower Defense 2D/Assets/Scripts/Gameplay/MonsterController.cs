@@ -19,6 +19,8 @@ public class MonsterController : MonoBehaviour
     public GameObject wood;
     public float priceDeath;
 
+    public float maxHealth;
+
     Color defaultColor;
 
     public float armor;
@@ -34,7 +36,7 @@ public class MonsterController : MonoBehaviour
         {
             health = value;
 
-            healthGreen.size = new Vector2((health * 2.41f) / 100, 0.43f);
+            healthGreen.size = new Vector2((health * 2.41f) / maxHealth, 0.43f);
             healthRed.size = new Vector2(2.41f - healthGreen.size.x, 0.43f);
 
             if (health <= 0)
@@ -53,7 +55,7 @@ public class MonsterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Health = 100;
+        Health = maxHealth;
         Move();
         defaultColor = skeletonAnimation.skeleton.GetColor();
 

@@ -37,10 +37,15 @@ public class ArcherTowerController : MonoBehaviour
             SetIdle();
 
             attackRange.localScale = new Vector2(fireRange, fireRange);
+
+            if (MonsterSpawnController.instance.WaveSpawn > 5)
+            {
+                damage += damage * MonsterSpawnController.instance.WaveSpawn * 2 / 100;
+            }
         }
     }
 
-    private float damage;
+    public float damage;
     private float fireRate;
     private float fireRange;
     public float price;

@@ -348,14 +348,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638caf2b9976ecc45a41ed97acd75dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.15
+  moveSpeed: 0.3
   wayPoints: []
   healthGreen: {fileID: 7544851812145934405}
   healthRed: {fileID: 3236910332784289665}
   offset: {x: 0, y: 0.73, z: 0}
   wood: {fileID: 2417795013944523854}
-  priceDeath: 200
-  armor: 50
+  priceDeath: 100
+  maxHealth: 2000
+  armor: 25
 --- !u!1 &2417795013944523854
 GameObject:
   m_ObjectHideFlags: 0

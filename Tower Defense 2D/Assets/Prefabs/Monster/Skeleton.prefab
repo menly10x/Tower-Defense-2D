@@ -386,7 +386,9 @@ MonoBehaviour:
   healthRed: {fileID: 8985985640052236992}
   offset: {x: 0, y: 0.34, z: 0}
   wood: {fileID: 17580665748069693}
-  priceDeath: 3
+  priceDeath: 10
+  maxHealth: 100
+  armor: 0
 --- !u!1 &3679202288635283132
 GameObject:
   m_ObjectHideFlags: 0

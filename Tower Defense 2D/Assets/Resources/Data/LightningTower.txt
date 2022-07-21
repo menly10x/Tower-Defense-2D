@@ -4,13 +4,13 @@
    "Damage": 75,
    "FireRate": 5,
    "FireRange": 1.5,
-   "Price": 1000
+   "Price": 400
  },
  {
    "Level": 2,
-   "Damage": 100,
-   "FireRate": 5,
+   "Damage": 400,
+   "FireRate": 10,
    "FireRange": 1.5,
-   "Price": 2000
+   "Price": 1000
  }
 ]

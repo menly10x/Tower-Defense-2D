@@ -20,7 +20,7 @@ public class MonsterSpawnController : MonoBehaviour
     public GameObject[] leader;
     public GameObject[] normal;
 
-    int totalTurnSpawn = 5;
+    int totalTurnSpawn = 2;
     float timeBetweenWave = 5f;
     float countDown = 5f;
     public bool isDoneSpawn = true;
@@ -36,6 +36,29 @@ public class MonsterSpawnController : MonoBehaviour
         {
             waveSpawn = value;
             UIController.instance.txtWave.text = waveSpawn.ToString();
+
+            if (waveSpawn > 5)
+            {
+                foreach (Transform tower in TowerManager.instance.towerParent)
+                {
+                    if (tower.GetComponent<ArcherTowerController>() != null)
+                    {
+                        tower.GetComponent<ArcherTowerController>().damage += tower.GetComponent<ArcherTowerController>().damage * waveSpawn * 0.02f;
+                    }
+                    else if (tower.GetComponent<CanonTowerController>() != null)
+                    {
+                        tower.GetComponent<CanonTowerController>().damage += tower.GetComponent<CanonTowerController>().damage * waveSpawn * 0.02f;
+                    }
+                    else if (tower.GetComponent<MagicTowerController>() != null)
+                    {
+                        tower.GetComponent<MagicTowerController>().damage += tower.GetComponent<MagicTowerController>().damage * waveSpawn * 0.02f;
+                    }
+                    else if (tower.GetComponent<LightningTowerController>() != null)
+                    {
+                        tower.GetComponent<LightningTowerController>().damage += tower.GetComponent<LightningTowerController>().damage * waveSpawn * 0.02f;
+                    }
+                }
+            }
         }
     }
 
@@ -101,8 +124,13 @@ public class MonsterSpawnController : MonoBehaviour
             yield return new WaitForSeconds(5f);
         }
 
-        totalTurnSpawn++;
         WaveSpawn++;
+
+        if (WaveSpawn % 2 == 0)
+        {
+            totalTurnSpawn++;
+        }
+
         isDoneSpawn = true;
     }
 
@@ -115,9 +143,11 @@ public class MonsterSpawnController : MonoBehaviour
             AddLeaderMonster(1);
             AddNormalMonster(3);
             AddWay1Path();
+            AddWay2Path();
         }
         else if (WaveSpawn > 5 && WaveSpawn <= 10)
         {
+            AddBossMonster(1);
             AddLeaderMonster(2);
             AddNormalMonster(3);
             AddWay1Path();
@@ -125,6 +155,8 @@ public class MonsterSpawnController : MonoBehaviour
         }
         else if (WaveSpawn > 10 && WaveSpawn <= 20)
         {
+            AddBossMonster(1);
+            AddBoss2Monster(1);
             AddLeaderMonster(3);
             AddNormalMonster(7);
             AddWay1Path();
@@ -133,6 +165,7 @@ public class MonsterSpawnController : MonoBehaviour
         else if (WaveSpawn > 20 && WaveSpawn <= 30)
         {
             AddBossMonster(2);
+            AddBoss2Monster(2);
             AddLeaderMonster(5);
             AddNormalMonster(15);
             AddWay1Path();
@@ -142,6 +175,7 @@ public class MonsterSpawnController : MonoBehaviour
         else if (WaveSpawn > 30)
         {
             AddBossMonster(5);
+            AddBoss2Monster(5);
             AddLeaderMonster(10);
             AddNormalMonster(30);
             AddWay1Path();
@@ -170,7 +204,15 @@ public class MonsterSpawnController : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            monsters.Add(boss[Random.Range(0, boss.Length)]);
+            monsters.Add(boss[0]);
+        }
+    }
+
+    void AddBoss2Monster(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            monsters.Add(boss[1]);
         }
     }
 

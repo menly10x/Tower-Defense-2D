@@ -16,6 +16,9 @@ public class CanonTowerController : MonoBehaviour
     List<GameObject> monsters = new List<GameObject>();
     float countDown = 0;
 
+    private float bulletSpeed = 1f;
+    private float missileSpeed = 3f;
+
     SkeletonAnimation effectShoot;
 
     List<float> angles = new List<float>();
@@ -46,10 +49,15 @@ public class CanonTowerController : MonoBehaviour
             SetIdle();
 
             attackRange.localScale = new Vector2(fireRange, fireRange);
+
+            if (MonsterSpawnController.instance.WaveSpawn > 5)
+            {
+                damage += damage * MonsterSpawnController.instance.WaveSpawn * 2 / 100;
+            }
         }
     }
 
-    private float damage;
+    public float damage;
     private float fireRate;
     private float fireRange;
     public float price;
@@ -248,6 +256,9 @@ public class CanonTowerController : MonoBehaviour
             bullet.transform.localPosition = new Vector3(0, 0, 0);
 
             AudioController.instance.PlaySound("canonShoot");
+
+            float timeToShoot = Vector2.Distance(bullet.transform.position, monsterPosition) / bulletSpeed;
+
             bullet.transform.DOJump(monsterPosition, 1f, 1, 1f).SetEase(Ease.Linear);
 
             yield return new WaitForSeconds(1f);
@@ -335,9 +346,12 @@ public class CanonTowerController : MonoBehaviour
         direct = monsterPosition - positionUp;
         angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
-        bullet.transform.DOMove(monsterPosition, 0.5f).SetEase(Ease.Linear);
 
-        yield return new WaitForSeconds(0.5f);
+        float timeToShoot = Vector2.Distance(bullet.transform.position, monsterPosition) / missileSpeed;
+
+        bullet.transform.DOMove(monsterPosition, timeToShoot).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(timeToShoot);
 
         bullet.transform.GetChild(3).gameObject.SetActive(false);
 
@@ -424,9 +438,12 @@ public class CanonTowerController : MonoBehaviour
         direct = monsterPosition - positionUp;
         angle = Mathf.Atan2(direct.y, direct.x) * Mathf.Rad2Deg;
         bullet.transform.GetChild(0).localRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
-        bullet.transform.DOMove(monsterPosition, 0.5f).SetEase(Ease.Linear);
 
-        yield return new WaitForSeconds(0.5f);
+        float timeToShoot = Vector2.Distance(bullet.transform.position, monsterPosition) / missileSpeed;
+
+        bullet.transform.DOMove(monsterPosition, timeToShoot).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(timeToShoot);
 
         bullet.transform.GetChild(3).gameObject.SetActive(false);
 
